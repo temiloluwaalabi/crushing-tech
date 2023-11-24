@@ -106,7 +106,7 @@ function handleUserToasterEscapeKey(event) {
 function closeMenu(element, element2) {
   removeClass(element2, "show");
   element.ariaExpanded = "false";
-  // removeClass(element, "focused");
+  removeClass(element, "focused");
 }
 function toggleUserToasterBody() {
   const isShowing = toasterUser.classList.contains("show");
