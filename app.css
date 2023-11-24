@@ -897,7 +897,7 @@ main {
 }
 @media screen and (max-width: 390px) {
   .input-container {
-    width: 94%;
+    width: 100%;
     margin-left: 8px;
   }
   .toaster-user {
