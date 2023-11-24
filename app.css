@@ -876,7 +876,7 @@ main {
 @media screen and (max-width: 550px) {
   .input-container {
     width: 238px;
-    margin-left: 20px;
+    margin-left: 10px;
   }
   .alert-body {
     flex-direction: column;
