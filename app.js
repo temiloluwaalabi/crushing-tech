@@ -19,16 +19,32 @@ const notificationToaster = document.querySelector(".alert-toaster");
 const allSettingsLink = toasterUser.querySelectorAll(".link__link");
 const settings = document.querySelector(".settings_link");
 const setupToggleDiv = document.querySelector(".setup-card__header");
+const hiddenMessage = document.getElementById("visuallyHiddenMessage");
 
 // Add or remove a class
+// Function to announce the visibility change to screen readers
+function announceVisibility(label) {
+  const labelledByIds = label.getAttribute("aria-labelledby").split(" ");
+  const labelText = labelledByIds
+    .map((id) => document.getElementById(id).textContent)
+    .join(", "); // Concatenate multiple labelledBy elements if needed
+
+  hiddenMessage.ariaLabel = `${labelText} description is now visible.`;
+  // Set focus to the hidden message to trigger screen reader announcement
+  hiddenMessage.focus();
+}
+function statusCheck(content) {
+  hiddenMessage.ariaLabel = `${content}`;
+  // Set focus to the hidden message to trigger screen reader announcement
+  hiddenMessage.focus();
+}
+
 function toggleClass(element, className) {
   element.classList.toggle(className);
 }
-
 function removeClass(element, className) {
   element.classList.remove(className);
 }
-
 function addClass(element, className) {
   element.classList.add(className);
 }
@@ -44,7 +60,6 @@ function toggleToaster(val1, val2, val3, val4) {
   val3.focus();
   val4.ariaExpanded = "true";
 }
-
 function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   // create vars: lastMenuItem & firstMenuItem
   const isLastMenuItem = menuItemIndex === list.length - 1;
@@ -85,7 +100,6 @@ function openMenu() {
     });
   });
 }
-
 function keyPress() {
   const scrollDivs = setupBodyDiv.querySelectorAll(".customize");
   scrollDivs.item(0).focus();
@@ -97,6 +111,7 @@ function keyPress() {
     });
   });
 }
+keyPress();
 function handleUserToasterEscapeKey(event) {
   if (event.key === "Escape") {
     toggleUserToasterBody();
@@ -106,7 +121,7 @@ function handleUserToasterEscapeKey(event) {
 function closeMenu(element, element2) {
   removeClass(element2, "show");
   element.ariaExpanded = "false";
-  removeClass(element, "focused");
+  // removeClass(element, "focused");
 }
 function toggleUserToasterBody() {
   const isShowing = toasterUser.classList.contains("show");
@@ -125,6 +140,9 @@ function toggleNotificationToasterBody() {
     closeMenu(notification, notificationToaster);
   } else {
     toggleToaster(userToaster, toasterUser, notificationToaster, notification);
+    const cionc = notificationToaster.querySelectorAll(".icon");
+    cionc.item(0).focus();
+
     // const firstIcon = notificationToaster.querySelector(".alert--filter");
     // firstIcon.focus();
     userToaster.classList.remove("focused");
@@ -133,6 +151,46 @@ function toggleNotificationToasterBody() {
 document.querySelector(".user__name").addEventListener("click", () => {
   allSettingsLink.item(0).focus();
 });
+function getNextUncheckedStep(currentIndex) {
+  // Create an empty array to hold references to customize elements
+  const customizeArray = [];
+  // Populate customizeArray with elements from customize NodeList
+  customize.forEach((element) => {
+    customizeArray.push(element);
+  });
+  let nextStepAsc = null;
+  let nextStepDesc = null;
+  // Check ascending order (currentIndex + 1 to end)
+  for (let i = currentIndex + 1; i < customize.length; i++) {
+    const checked = customize[i].classList.contains("checked");
+    if (!checked) {
+      nextStepAsc = customize[i];
+      break;
+    }
+  }
+  // Check descending order (currentIndex - 1 to start)
+  for (let i = currentIndex - 1; i >= 0; i--) {
+    const checked = customize[i].classList.contains("checked");
+    if (!checked) {
+      nextStepDesc = customize[i];
+      break;
+    }
+  }
+
+  // Choose the nearest unchecked step
+  if (nextStepAsc && nextStepDesc) {
+    const ascDistance = Math.abs(
+      currentIndex - customizeArray.indexOf(nextStepAsc)
+    );
+    const descDistance = Math.abs(
+      currentIndex - customizeArray.indexOf(nextStepDesc)
+    );
+
+    return ascDistance <= descDistance ? nextStepAsc : nextStepDesc;
+  } else {
+    return nextStepAsc || nextStepDesc;
+  }
+}
 
 // -- START OF CLICK AND KEYPRESS EVENTS FOR THE USERTOASTER--- //
 userToaster.addEventListener("click", (event) => {
@@ -175,29 +233,31 @@ alertClose.addEventListener("click", () => {
   alert.setAttribute("aria-live", "off");
 });
 
+// refactor the key event for everything, check MDN to be sure
+
 function toggleOpenSetupBody() {
-  setupBody.classList.add("show");
+  setupBody.classList.remove("hide");
   setupBody.setAttribute("aria-hidden", "false");
   setupToggleDiv.setAttribute("aria-expanded", "true");
   headerToggleHide.setAttribute("aria-hidden", "true");
-  headerToggleShow.classList.add("hide");
+  headerToggleShow.classList.remove("show");
+  statusCheck("Onboarding step opened");
   // headerToggleShow.classList.remove("headerFocus");
-  headerToggleHide.classList.add("show");
+  headerToggleHide.classList.remove("hide");
   headerToggleHide.querySelector(".icon").setAttribute("aria-hidden", "false");
+  headerToggleShow.querySelector(".icon").setAttribute("aria-hidden", "true");
   headerToggleHide.focus();
   // headerToggleHide.classList.add("headerFocus");
-  keyPress();
 }
-
-setupBody.addEventListener("keyup", (event) => {
-  if (event.key === "Home") {
-    setupBody.classList.remove("show");
-    headerToggleHide.classList.remove("show");
-    setupToggleDiv.setAttribute("aria-expanded", "false");
-    headerToggleShow.classList.remove("hide");
-    headerToggleShow.focus();
-  }
-});
+// setupBody.addEventListener("keyup", (event) => {
+//   if (event.key === "Home") {
+//     setupBody.classList.add("hide");
+//     headerToggleHide.classList.remove("show");
+//     setupToggleDiv.setAttribute("aria-expanded", "false");
+//     headerToggleShow.classList.remove("hide");
+//     headerToggleShow.focus();
+//   }
+// });
 headerToggleShow.addEventListener("keyup", (event) => {
   const code = event.key;
   const isShowing = setupBody.classList.contains("show");
@@ -210,25 +270,26 @@ headerToggleShow.addEventListener("keyup", (event) => {
   }
 });
 function toggleCloseSetupBody() {
-  setupBody.classList.remove("show");
+  setupBody.classList.add("hide");
+
   setupBody.setAttribute("aria-hidden", "true");
-  setupToggleDiv.setAttribute("aria-expanded", "false");
-  headerToggleShow.classList.remove("hide");
+  setupToggleDiv.setAttribute("aria-expanded", "true");
+  headerToggleShow.classList.add("show");
+  statusCheck("Onboarding step closed");
   headerToggleHide.querySelector(".icon").setAttribute("aria-hidden", "true");
+  headerToggleShow.querySelector(".icon").setAttribute("aria-hidden", "false");
   headerToggleShow.focus();
-  // headerToggleShow.classList.add("headerFocus");
-  // headerToggleHide.classList.remove("headerFocus");
-  headerToggleHide.classList.remove("show");
+  headerToggleHide.classList.add("hide");
 }
+
 headerToggleShow.addEventListener("click", toggleOpenSetupBody);
 
 function toggleBodyHeader(event) {
   const code = event.key;
-  const expanded = setupToggleDiv.getAttribute("aria-expanded") === "true";
-  // const isShowing = setupBody.classList.contains("show");
+  const notExpanded = setupToggleDiv.getAttribute("aria-expanded") === "false";
   if (code === "Enter") {
     event.preventDefault();
-    if (!expanded) {
+    if (notExpanded) {
       toggleOpenSetupBody();
     }
   }
@@ -239,32 +300,42 @@ headerToggleShow.addEventListener("keyup", (event) => {
 headerToggleHide.addEventListener("keyup", (event) => {
   const code = event.key;
   const expanded = setupToggleDiv.getAttribute("aria-expanded") === "true";
-  const isShowing = setupBody.classList.contains("show");
   if (code === "Escape") {
     event.preventDefault();
     if (expanded) {
       toggleCloseSetupBody();
+      setupToggleDiv.setAttribute("aria-expanded", "false");
     }
   }
 });
 headerToggleHide.addEventListener("click", toggleCloseSetupBody);
 
 function onBoardingSteps(item, content) {
-  customize.forEach((otherTabs) => {
-    otherTabs.querySelector(".setup_hidden").classList.remove("show");
-    const checked = otherTabs.querySelector(".loader_checked");
-    if (!checked.classList.contains("show")) {
-      otherTabs.classList.remove("active-customize");
-    }
-  });
-  content.classList.add("show");
-  item.querySelector(".loader").focus();
-  item.classList.add("active-customize");
+  const header = item.querySelector(".setup-header");
+  const contentIsHidden = !content.classList.contains("show");
+
+  if (contentIsHidden) {
+    customize.forEach((otherTabs) => {
+      const otherContent = otherTabs.querySelector(".setup_hidden");
+      if (otherContent !== content) {
+        otherContent.classList.remove("show");
+        otherTabs.classList.remove("active-customize");
+        otherTabs
+          .querySelector(".setup-header")
+          .setAttribute("aria-expanded", "false");
+      }
+    });
+    content.classList.add("show");
+    header.setAttribute("aria-expanded", "true");
+    announceVisibility(content);
+    item.querySelector(".loader").focus();
+    item.classList.add("active-customize");
+    item.style.animationName = "none";
+  }
 }
 customize.forEach((item) => {
   const header = item.querySelector(".setup-header");
   const content = item.querySelector(".setup_hidden");
-  // const checked = item.querySelector(".loader_checked")
   header.addEventListener("click", () => {
     onBoardingSteps(item, content);
   });
@@ -274,41 +345,34 @@ customize.forEach((item) => {
     }
   });
 });
+// onboarding ends
 
-function getNextUncheckedStep() {
-  let nextStep = null;
-  customize.forEach((step, index) => {
-    const checked = step.querySelector(".loader_checked");
-    if (!checked.classList.contains("show") && !nextStep) {
-      nextStep = customize[index];
-    }
-  });
-  return nextStep;
-}
+//
 
 let stepsCompletedCount = 0;
+//click event for loaders change
+// loader.forEach((load) => {
+//   const loaderEmpty = load.querySelector(".loader_empty");
+//   const loaderHover = load.querySelector(".loader_hover");
+//   const loaderHoverFilled = load.querySelector(".loader_hover--filled");
 
-loader.forEach((load) => {
-  const loaderEmpty = load.querySelector(".loader_empty");
-  const loaderHover = load.querySelector(".loader_hover");
-  const loaderHoverFilled = load.querySelector(".loader_hover--filled");
+//   loaderEmpty.addEventListener("mouseenter", () => {
+//     loaderHover.style.display = "block";
+//     loaderEmpty.style.display = "none";
+//   });
+//   loaderEmpty.addEventListener("mouseleave", () => {
+//     loaderHover.style.display = "none";
+//     loaderEmpty.style.display = "block";
+//   });
 
-  loaderEmpty.addEventListener("mouseenter", () => {
-    loaderHover.style.display = "block";
-    loaderEmpty.style.display = "none";
-  });
-  loaderEmpty.addEventListener("mouseleave", () => {
-    loaderHover.style.display = "none";
-    loaderEmpty.style.display = "block";
-  });
-
-  loaderEmpty.addEventListener("click", () => {
-    loaderHoverFilled.style.display = "block";
-  });
-});
-
-function loadingState(load) {
+//   loaderEmpty.addEventListener("click", () => {
+//     loaderHoverFilled.style.display = "block";
+//   });
+// });
+// click event for checking
+function loadingState(load, index) {
   //loaders
+  const currentIndex = index;
   const loaderChecked = load.querySelector(".loader_checked");
   const blurCheck = load.querySelector(".blur_check");
   const loaderHoverFilled = load.querySelector(".loader_hover--filled");
@@ -317,82 +381,105 @@ function loadingState(load) {
   //checked element
   const checkedElement = loaderChecked.classList.contains("show");
   const parentElement = load.parentElement;
-  const grandParent = parentElement.parentElement;
+  const parentGrandParents = parentElement.parentElement;
+  const grandParent = parentGrandParents.parentElement;
+
   //hidden content
   const hiddenStep = grandParent.querySelector(".setup_hidden");
   if (!checkedElement) {
     loaderEmpty.classList.add("hide");
     loaderLoading.classList.add("show");
+    statusCheck("Loading, please wait!");
     setTimeout(() => {
       loaderLoading.classList.remove("show");
-      blurCheck.classList.add("rotate-blur-check");
       blurCheck.classList.add("show");
-      blurCheck.style.transform = "rotate(200deg)";
-      loaderHoverFilled.style.display = "none";
+      blurCheck.classList.add("rotate-blur-check");
       setTimeout(() => {
-        blurCheck.style.transition = "transform 0.5s ease-in-out"; // Smooth transition
-        blurCheck.style.transform = "rotate(135deg)"; // Rotate to 135deg for blur effect
-        setTimeout(() => {
-          blurCheck.classList.remove("show");
-          loaderChecked.classList.add("rotate-dark-check");
-          loaderChecked.classList.add("show");
-          loaderHoverFilled.style.display = "none";
-          grandParent.classList.add("active-customize");
-          grandParent.classList.add("checked");
-
-          const nextStep = getNextUncheckedStep();
-          if (nextStep) {
-            const nextContent = nextStep.querySelector(".setup_hidden");
-            nextContent.classList.add("show");
-            nextStep.classList.add("active-customize");
-          }
-          if (!loaderEmpty.classList.contains("hide")) {
+        blurCheck.classList.remove("show");
+        loaderChecked.classList.add("rotate-dark-check");
+        loaderChecked.classList.add("show");
+        statusCheck("Successfully marked this step as complete");
+        load.ariaLabel = "Mark this step as incomplete";
+        grandParent.classList.add("checked");
+        const nextStep = getNextUncheckedStep(currentIndex);
+        if (nextStep) {
+          customize.forEach((step) => {
+            if (step !== nextStep) {
+              if (step.classList.contains("active-customize")) {
+                step.classList.remove("active-customize");
+              }
+              const content = step.querySelector(".setup_hidden");
+              if (content.classList.contains("show")) {
+                content.classList.remove("show");
+                step.classList.remove("active-customize");
+              }
+            }
+          });
+          const nextContent = nextStep.querySelector(".setup_hidden");
+          nextContent.classList.add("show");
+          nextStep.classList.add("active-customize");
+          if (grandParent.classList.contains("active-customize")) {
             grandParent.classList.remove("active-customize");
-            grandParent.classList.remove("checked");
           }
-
-          if (!checkedElement && stepsCompletedCount < 5) {
-            stepsCompletedCount++;
-            updateSliderAndSteps(stepsCompletedCount);
+        }
+        if (!loaderEmpty.classList.contains("hide")) {
+          grandParent.classList.remove("active-customize");
+          grandParent.classList.remove("checked");
+        }
+        if (stepsCompletedCount < 5) {
+          stepsCompletedCount++;
+          updateSliderAndSteps(stepsCompletedCount);
+          if (stepsCompletedCount < 5) {
             hiddenStep.classList.remove("show");
           }
-          if (checkedElement) {
-            stepsCompletedCount--;
-            updateSliderAndSteps(stepsCompletedCount);
-            hiddenStep.classList.remove("show");
-          }
-        }, 200);
-      }, 600);
-    }, 600);
+        }
+      }, 500);
+    }, 1000);
   } else {
+    load.ariaLabel = "Mark this step as complete";
     blurCheck.classList.remove("show");
-    blurCheck.style.transform = "rotate(0deg)";
     blurCheck.classList.remove("rotate-blur-check");
-    loaderEmpty.classList.remove("hide");
-    loaderChecked.classList.remove("rotate-dark-check");
     loaderChecked.classList.remove("show");
-    loaderLoading.classList.remove("show");
-    if (!loaderEmpty.classList.contains("hide")) {
-      grandParent.classList.remove("active-customize");
-      grandParent.classList.remove("checked");
-    }
 
-    if (!checkedElement && stepsCompletedCount < 5) {
-      stepsCompletedCount++;
-      updateSliderAndSteps(stepsCompletedCount);
-      hiddenStep.classList.remove("show");
-    }
-    if (checkedElement) {
-      stepsCompletedCount--;
-      updateSliderAndSteps(stepsCompletedCount);
-      hiddenStep.classList.remove("show");
-    }
+    loaderLoading.classList.add("show");
+    statusCheck("Loading... please wait!");
+    setTimeout(() => {
+      loaderLoading.classList.remove("show");
+      loaderEmpty.classList.remove("hide");
+      statusCheck("Successfully marked this step as incomplete");
+      loaderChecked.classList.remove("rotate-dark-check");
+      if (!loaderEmpty.classList.contains("hide")) {
+        grandParent.classList.remove("active-customize");
+        grandParent.classList.remove("checked");
+      }
+      if (checkedElement) {
+        stepsCompletedCount--;
+        updateSliderAndSteps(stepsCompletedCount);
+
+        if (stepsCompletedCount > 0) {
+          hiddenStep.classList.remove("show");
+        } else {
+          if (stepsCompletedCount === 0) {
+            grandParent.classList.add("active-customize");
+            hiddenStep.classList.add("show");
+            customize.forEach((content) => {
+              const hiddenContent = content.querySelector(".setup_hidden");
+              if (hiddenStep !== hiddenContent) {
+                hiddenContent.classList.remove("show");
+                content.classList.remove("active-customize");
+              }
+            });
+          }
+        }
+      }
+    }, 300);
   }
   loaderChecked.classList.remove("rotate-dark-check");
   blurCheck.classList.remove("rotate-blur-check");
 }
-
-function loadingKeyState(load, event) {
+// key event for checking
+function loadingKeyState(load, event, index) {
+  const currentIndex = index;
   //loaders
   const loaderChecked = load.querySelector(".loader_checked");
   const blurCheck = load.querySelector(".blur_check");
@@ -402,111 +489,155 @@ function loadingKeyState(load, event) {
   //checked element
   const checkedElement = loaderChecked.classList.contains("show");
   const parentElement = load.parentElement;
-  const grandParent = parentElement.parentElement;
+  const parentGrandParents = parentElement.parentElement;
+  const grandParent = parentGrandParents.parentElement;
   //hidden content
   const hiddenStep = grandParent.querySelector(".setup_hidden");
   if (event.key === "Enter") {
+    //hidden content
+    const hiddenStep = grandParent.querySelector(".setup_hidden");
     if (!checkedElement) {
       loaderEmpty.classList.add("hide");
       loaderLoading.classList.add("show");
+      statusCheck("Loading, please wait!");
       setTimeout(() => {
         loaderLoading.classList.remove("show");
-        blurCheck.classList.add("rotate-blur-check");
         blurCheck.classList.add("show");
-        blurCheck.style.transform = "rotate(200deg)";
-        loaderHoverFilled.style.display = "none";
+        blurCheck.classList.add("rotate-blur-check");
         setTimeout(() => {
-          blurCheck.style.transition = "transform 0.5s ease-in-out"; // Smooth transition
-          blurCheck.style.transform = "rotate(135deg)"; // Rotate to 135deg for blur effect
-          setTimeout(() => {
-            blurCheck.classList.remove("show");
-            loaderChecked.classList.add("rotate-dark-check");
-            loaderChecked.classList.add("show");
-            loaderHoverFilled.style.display = "none";
-            grandParent.classList.add("active-customize");
-            hiddenStep.classList.remove("show");
-            grandParent.classList.add("checked");
+          blurCheck.classList.remove("show");
+          loaderChecked.classList.add("rotate-dark-check");
+          loaderChecked.classList.add("show");
+          statusCheck("Successfully marked this step as complete");
+          load.ariaLabel = "Mark this step as incomplete";
+          grandParent.classList.add("checked");
+          const nextStep = getNextUncheckedStep(currentIndex);
 
-            const nextStep = getNextUncheckedStep();
-            if (nextStep) {
-              const nextContent = nextStep.querySelector(".setup_hidden");
-              nextContent.classList.add("show");
-              nextStep.classList.add("active-customize");
-            }
-
-            loaderChecked.classList.remove("rotate-dark-check");
-            blurCheck.classList.remove("rotate-blur-check");
-
-            if (!loaderEmpty.classList.contains("hide")) {
+          if (nextStep) {
+            customize.forEach((step) => {
+              if (step !== nextStep) {
+                if (step.classList.contains("active-customize")) {
+                  step.classList.remove("active-customize");
+                }
+                const content = step.querySelector(".setup_hidden");
+                if (content.classList.contains("show")) {
+                  content.classList.remove("show");
+                  step.classList.remove("active-customize");
+                }
+              }
+            });
+            const nextContent = nextStep.querySelector(".setup_hidden");
+            nextContent.classList.add("show");
+            nextStep.classList.add("active-customize");
+            nextStep.querySelector(".loader").focus();
+            if (grandParent.classList.contains("active-customize")) {
               grandParent.classList.remove("active-customize");
-              grandParent.classList.remove("checked");
             }
+          }
 
-            if (!checkedElement && stepsCompletedCount < 5) {
-              stepsCompletedCount++;
-              updateSliderAndSteps(stepsCompletedCount);
+          if (!loaderEmpty.classList.contains("hide")) {
+            grandParent.classList.remove("active-customize");
+            grandParent.classList.remove("checked");
+          }
+          if (stepsCompletedCount < 5) {
+            stepsCompletedCount++;
+            updateSliderAndSteps(stepsCompletedCount);
+            if (stepsCompletedCount < 5) {
               hiddenStep.classList.remove("show");
             }
-            if (checkedElement) {
-              stepsCompletedCount--;
-              updateSliderAndSteps(stepsCompletedCount);
-              hiddenStep.classList.remove("show");
-            }
-          }, 200);
-        }, 600);
-      }, 600);
+          }
+        }, 500);
+      }, 1000);
     } else {
+      load.ariaLabel = "Mark this step as complete";
       blurCheck.classList.remove("show");
-      blurCheck.style.transform = "rotate(0deg)";
       blurCheck.classList.remove("rotate-blur-check");
-      loaderEmpty.classList.remove("hide");
       loaderChecked.classList.remove("rotate-dark-check");
       loaderChecked.classList.remove("show");
+      loaderLoading.classList.add("show");
+      statusCheck("Loading, Please wait!");
+      setTimeout(() => {
+        loaderLoading.classList.remove("show");
+        loaderEmpty.classList.remove("hide");
+        statusCheck("Successfully marked this step as incomplete");
+        if (!loaderEmpty.classList.contains("hide")) {
+          grandParent.classList.remove("active-customize");
+          grandParent.classList.remove("checked");
+        }
+        if (checkedElement) {
+          stepsCompletedCount--;
+          updateSliderAndSteps(stepsCompletedCount);
+
+          if (stepsCompletedCount > 0) {
+            hiddenStep.classList.remove("show");
+          } else {
+            if (stepsCompletedCount === 0) {
+              grandParent.classList.add("active-customize");
+              hiddenStep.classList.add("show");
+              customize.forEach((content) => {
+                const hiddenContent = content.querySelector(".setup_hidden");
+                if (hiddenStep !== hiddenContent) {
+                  hiddenContent.classList.remove("show");
+                  content.classList.remove("active-customize");
+                }
+              });
+            }
+          }
+        }
+      }, 300);
+    }
+  }
+  if (event.key === "Escape") {
+    load.ariaLabel = "Mark this step as complete";
+    blurCheck.classList.remove("show");
+    blurCheck.classList.remove("rotate-blur-check");
+    loaderChecked.classList.remove("rotate-dark-check");
+    loaderChecked.classList.remove("show");
+    loaderLoading.classList.add("show");
+    statusCheck("Loading, Please wait!");
+    setTimeout(() => {
       loaderLoading.classList.remove("show");
-
-      loaderChecked.classList.remove("rotate-dark-check");
-      blurCheck.classList.remove("rotate-blur-check");
-
+      loaderEmpty.classList.remove("hide");
+      statusCheck("Successfully marked this step as incomplete");
       if (!loaderEmpty.classList.contains("hide")) {
         grandParent.classList.remove("active-customize");
         grandParent.classList.remove("checked");
       }
-
-      if (!checkedElement && stepsCompletedCount < 5) {
-        stepsCompletedCount++;
-        updateSliderAndSteps(stepsCompletedCount);
-        hiddenStep.classList.remove("show");
-      }
       if (checkedElement) {
         stepsCompletedCount--;
         updateSliderAndSteps(stepsCompletedCount);
-        hiddenStep.classList.remove("show");
+
+        if (stepsCompletedCount > 0) {
+          hiddenStep.classList.remove("show");
+        } else {
+          if (stepsCompletedCount === 0) {
+            grandParent.classList.add("active-customize");
+            hiddenStep.classList.add("show");
+            customize.forEach((content) => {
+              const hiddenContent = content.querySelector(".setup_hidden");
+              if (hiddenStep !== hiddenContent) {
+                hiddenContent.classList.remove("show");
+                content.classList.remove("active-customize");
+              }
+            });
+          }
+        }
       }
-    }
-  }
-  if (event.key === "Escape") {
-    blurCheck.classList.remove("show");
-    blurCheck.style.transform = "rotate(0deg)";
-    blurCheck.classList.remove("rotate-blur-check");
-    loaderEmpty.classList.remove("hide");
-    loaderChecked.classList.remove("rotate-dark-check");
-    loaderChecked.classList.remove("show");
-    loaderLoading.classList.remove("show");
+    }, 300);
   }
 }
-
-loader.forEach((load) => {
+loader.forEach((load, index) => {
   load.addEventListener("click", () => {
-    loadingState(load);
+    loadingState(load, index);
   });
 });
-
-loader.forEach((load) => {
+loader.forEach((load, index) => {
   load.addEventListener("keyup", (event) => {
-    loadingKeyState(load, event);
+    loadingKeyState(load, event, index);
   });
 });
 
+// range stuff
 const range = document.querySelector(".footer-range");
 function updateSliderAndSteps(steps) {
   stepsCompletedCount = steps;
@@ -518,3 +649,5 @@ function updateSliderAndSteps(steps) {
   range.setAttribute("aria-valuemax", 5);
   range.setAttribute("aria-valuetext", `${steps} out of ${total} completed`);
 }
+
+// watch the last video and make some edits
