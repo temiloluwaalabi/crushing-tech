@@ -713,17 +713,17 @@ main {
   justify-content: space-between;
   align-self: stretch;
   border-radius: 10px;
-  height: 40px;
-  transition: height 0.3s ease-out;
+  height: auto;
+  transition: opacity 0.3s ease-out;
 }
 
 @keyframes stepDown {
   from {
-    height: 0;
+    opacity: 0;
     padding: 0; /* Adjust padding from 0 to the actual padding you desire */
   }
   to {
-    height: 100%;
+    opacity: 1;
     padding: 12px 8px; /* Set the final padding */
   }
 }
@@ -805,35 +805,6 @@ main {
   display: flex;
   gap: 96px;
 }
-
-/* .setup_hidden {
-  width: 100%;
-  overflow: hidden;
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  display: none;
-  padding-left: 34px;
-  opacity: 0;
-  height: 0;
-  transition: height 0.3s ease-in, opacity 0.3s ease-in;
-}
-.setup_hidden.show {
-  opacity: 1;
-  height: 100px;
-  animation-name: stepDown;
-  animation-duration: 0.3s;
-}
-@keyframes stepDown {
-  from {
-    opacity: 0;
-    height: 0;
-  }
-  to {
-    opacity: 1;
-    height: 100px;
-  }
-} */
 
 /* loaders */
 .loader {
