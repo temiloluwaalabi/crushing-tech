@@ -44,7 +44,6 @@
 body {
   background: var(--background);
   font-family: "Inter", sans-serif;
-  max-width: 1280px;
 }
 a {
   text-decoration: none;
