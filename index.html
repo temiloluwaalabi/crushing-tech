@@ -14,20 +14,22 @@
     <link rel="stylesheet" href="./app.css" />
   </head>
   <body>
+    <!-- STARTING OF HEADER -->
     <header class="flex-between">
       <div class="desktop_logo">
+        <!-- DESKTOP LOGO -->
         <a href="https://shopify.com" target="_blank" rel="noopener">
           <img
             class="logo"
             src="https://crushingit.tech/hackathon-assets/shopify-icon-desktop.svg"
             alt="Shopify logo"
             role="img"
-            title="Shopify Logo"
             aria-labelledby="shopifyDesktopTitle"
           />
           <span id="shopifyDesktopTitle" class="visually-hidden">Shopify</span>
         </a>
       </div>
+      <!-- MOBILE LOGO -->
       <div class="mobile_logo">
         <a
           href="https://shopify.com"
@@ -64,6 +66,7 @@
           <span id="shopifyLogoTitle" class="visually-hidden">Shopify</span>
         </a>
       </div>
+      <!-- SEARHC BAR -->
       <div>
         <div class="input-container" tabindex="0" role="search">
           <label for="searchInput" class="visually-hidden">Search</label>
@@ -96,6 +99,7 @@
           />
         </div>
       </div>
+      <!-- NOTIFICATION AND SETTINGS ICON -->
       <div>
         <div class="user-section">
           <div
@@ -142,8 +146,11 @@
         </div>
       </div>
     </header>
+    <!-- END OF HEADER -->
     <main>
+      <!-- TOASTERS -->
       <div class="toaster">
+        <!-- USER SETTINGS TOASTER -->
         <div
           tabindex="0"
           role="menu"
@@ -198,6 +205,7 @@
             </div>
             <div></div>
           </div>
+          <!-- USER LINKS -->
           <div class="toaster-user__settings settings">
             <div class="settings_link">
               <a
@@ -275,6 +283,7 @@
             </div>
           </div>
         </div>
+        <!-- NOTIFICATION TOASTER -->
         <div class="alert-toaster" id="notification-toaster" role="alert">
           <div class="alert-toaster__header">
             <h4 class="font_large--600">Alerts</h4>
@@ -342,7 +351,8 @@
           </div>
         </div>
       </div>
-
+      <!-- END OF TOASTERS -->
+      <!-- ALERT TOASTER -->
       <div class="alert" role="alert">
         <div class="alert-body">
           <h4 class="alert-title">
@@ -370,7 +380,6 @@
               height="20"
               viewBox="0 0 20 20"
               fill="none"
-              aria-hidden="true"
             >
               <path
                 d="M13.9697 15.0303C14.2626 15.3232 14.7374 15.3232 15.0303 15.0303C15.3232 14.7374 15.3232 14.2626 15.0303 13.9697L11.0607 10L15.0303 6.03033C15.3232 5.73744 15.3232 5.26256 15.0303 4.96967C14.7374 4.67678 14.2626 4.67678 13.9697 4.96967L10 8.93934L6.03033 4.96967C5.73744 4.67678 5.26256 4.67678 4.96967 4.96967C4.67678 5.26256 4.67678 5.73744 4.96967 6.03033L8.93934 10L4.96967 13.9697C4.67678 14.2626 4.67678 14.7374 4.96967 15.0303C5.26256 15.3232 5.73744 15.3232 6.03033 15.0303L10 11.0607L13.9697 15.0303Z"
@@ -380,12 +389,15 @@
           </div>
         </div>
       </div>
+      <!-- END OF ALERT TOASTER -->
       <section class="setup-container">
+        <!-- MAIN ONBOARDING STEPS CARD -->
         <div
           class="setup-card"
           role="region"
           aria-labelledby="setup-card-heading"
         >
+          <!-- ONBOARDING STEP MODAL HEADER -->
           <div
             class="setup-card__header"
             aria-expanded="true"
@@ -398,6 +410,7 @@
                 Use this personalized guide to get your store up and running.
               </p>
             </div>
+            <!-- ONBOARDING STEPS HEADER ACTION BUTTONS -->
             <div class="header-toggle setup-card__header-toggle">
               <div
                 class="header-toggle__show"
@@ -447,8 +460,12 @@
                 </span>
               </div>
             </div>
+            <!-- END OF ACTION BUTTONS -->
           </div>
+          <!-- END OF ONBOARDING MODAL HEADER -->
+          <!-- ONBOARDING STEP MODAL FOOTER -->
           <div class="setup-footer">
+            <!-- PROGRESS BAR -->
             <div
               class="footer-range"
               role="progressbar"
@@ -466,7 +483,9 @@
               </div>
             </div>
           </div>
-
+          <!-- END OF ONBOARDING STEP MODAL FOOTER -->
+          <!-- END OF OBOARDING STEPS MODAL FOOTER -->
+          <!-- ONBOARDING STEPS MODAL MAIN BODY -->
           <div class="setup-body" id="setupbody-content">
             <div
               class="setup_body-one"
@@ -474,11 +493,13 @@
               aria-label="Onboarding Steps for Admin"
               id="accordion"
             >
+              <!-- VISIUALLY HIDDEN MESSAGE CONTAINER FOR SCREEN READERS -->
               <div
                 id="visuallyHiddenMessage"
                 class="visually-hidden"
                 aria-live="polite"
               ></div>
+              <!-- STEP 1 CONTAINER -->
               <div
                 class="customize active-customize"
                 aria-labelledby="customize-heading"
@@ -487,7 +508,9 @@
                 tabindex="0"
               >
                 <div class="customize_left">
+                  <!-- VISIBLE PART OF THE STEP -->
                   <div class="setup_show">
+                    <!-- ACTION LOADERS -->
                     <div
                       class="loader"
                       role="status"
@@ -630,6 +653,7 @@
                         </div>
                       </div>
                     </div>
+                    <!-- TOGGLE BUTTON -->
                     <button
                       type="button"
                       aria-label="Click to expand the first step"
@@ -641,6 +665,7 @@
                       Customize your online store
                     </button>
                   </div>
+                  <!-- HIDDEN CONTENTS -->
                   <div
                     class="setup_hidden show"
                     id="customize-description"
@@ -661,7 +686,7 @@
                         <button
                           type="button"
                           aria-label="Customize theme"
-                          class="label-btn__dark font_small--400 customize_theme"
+                          class="label-btn__dark font_small--400"
                         >
                           Customize theme
                         </button>
@@ -670,13 +695,14 @@
                         <img
                           src="https://crushingit.tech/hackathon-assets/customise-store.png"
                           alt="Customize Step Image"
-                          title="Customize Step Image"
+                          aria-hidden="true"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- STEP 2 CONTAINER -->
               <div
                 class="customize"
                 aria-labelledby="customize-product__heading"
@@ -685,7 +711,9 @@
                 tabindex="0"
               >
                 <div class="customize_left">
+                  <!-- VISIBLE PART OF THE STEP -->
                   <div class="setup_show">
+                    <!-- ACTION LOADERS -->
                     <div
                       class="loader"
                       role="status"
@@ -828,10 +856,11 @@
                         </div>
                       </div>
                     </div>
+                    <!-- TOGGLE ACTION BUTTON -->
                     <button
                       type="button"
                       aria-label="Click to expand second onboarding process"
-                      class="font_medium--600 setup-header add_your_first_product"
+                      class="font_medium--600 setup-header"
                       id="customize-product__heading"
                       aria-expanded="false"
                       aria-controls="customize-product__desc"
@@ -839,7 +868,7 @@
                       Add your first product
                     </button>
                   </div>
-
+                  <!-- HIDDEN PART OF THE STEP -->
                   <div
                     class="setup_hidden"
                     id="customize-product__desc"
@@ -863,14 +892,14 @@
                         </p>
                         <div class="button_container">
                           <button
-                            class="label-btn__dark font_small--400 add_product"
+                            class="label-btn__dark font_small--400"
                             aria-label="Add Product"
                             type="button"
                           >
                             Add product
                           </button>
                           <button
-                            class="label-btn__light font_small--600 import_product"
+                            class="label-btn__light font_small--600"
                             aria-label="Import Product"
                             type="button"
                           >
@@ -881,14 +910,15 @@
                       <div class="customize_right">
                         <img
                           src="https://crushingit.tech/hackathon-assets/product.png"
-                          title="First Product Image"
                           alt="First Product Image"
+                          aria-hidden="true"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- STEP 3 CONTAINER -->
               <div
                 class="customize"
                 aria-labelledby="customize-domain__heading"
@@ -897,7 +927,9 @@
                 tabindex="0"
               >
                 <div class="customize_left">
+                  <!-- VISIBLE PART OF THE STEP -->
                   <div class="setup_show">
+                    <!-- ACTION LOADERS -->
                     <div
                       class="loader"
                       role="status"
@@ -1040,8 +1072,9 @@
                         </div>
                       </div>
                     </div>
+                    <!-- TOGGLE ACTION BUTTON -->
                     <button
-                      class="font_medium--600 setup-header custom_domain"
+                      class="font_medium--600 setup-header"
                       id="customize-domain__heading"
                       aria-expanded="false"
                       aria-controls="customize-domain__desc"
@@ -1051,6 +1084,7 @@
                       Add a custom domain
                     </button>
                   </div>
+                  <!-- HIDDEN PART OF THE STEP -->
                   <div
                     class="setup_hidden"
                     id="customize-domain__desc"
@@ -1070,7 +1104,7 @@
                           >
                         </p>
                         <button
-                          class="label-btn__dark font_small--400 domain"
+                          class="label-btn__dark font_small--400"
                           aria-label="Add domain"
                           type="button"
                         >
@@ -1081,13 +1115,14 @@
                         <img
                           src="https://crushingit.tech/hackathon-assets/website.png"
                           alt="Domain Step Image"
-                          title="Domain Step Image"
+                          aria-hidden="true"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- STEP 4 CONTAINER -->
               <div
                 class="customize"
                 aria-labelledby="customize-store__heading"
@@ -1096,7 +1131,9 @@
                 tabindex="0"
               >
                 <div class="customize_left">
+                  <!-- VISIBLE PART OF THE STEP -->
                   <div class="setup_show">
+                    <!-- ACTION LOADERS -->
                     <div
                       class="loader"
                       role="status"
@@ -1239,8 +1276,9 @@
                         </div>
                       </div>
                     </div>
+                    <!-- TOGGLE ACTION BUTTON -->
                     <button
-                      class="font_medium--600 setup-header name_store"
+                      class="font_medium--600 setup-header"
                       id="customize-store__heading"
                       aria-expanded="false"
                       aria-controls="customize-store__desc"
@@ -1250,7 +1288,7 @@
                       Name your store
                     </button>
                   </div>
-
+                  <!-- HIDDEN PART OF THE STEP -->
                   <div
                     class="setup_hidden"
                     id="customize-store__desc"
@@ -1272,7 +1310,7 @@
                         <button
                           aria-label="Name Store"
                           type="button"
-                          class="label-btn__dark font_small--400 store"
+                          class="label-btn__dark font_small--400"
                         >
                           Name store
                         </button>
@@ -1281,13 +1319,14 @@
                         <img
                           src="https://crushingit.tech/hackathon-assets/name-store.png"
                           alt="Naming Step Setup Image"
-                          title="Naming Step Setup Image"
+                          aria-hidden="true"
                         />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <!-- STEP 5 CONTAINER -->
               <div
                 class="customize"
                 aria-labelledby="customize-payment__heading"
@@ -1296,7 +1335,9 @@
                 tabindex="0"
               >
                 <div class="customize_left">
+                  <!-- VISIBLE PART OF THE STEP -->
                   <div class="setup_show">
+                    <!-- ACTION LOADERS -->
                     <div
                       class="loader"
                       role="status"
@@ -1439,8 +1480,9 @@
                         </div>
                       </div>
                     </div>
+                    <!-- TOGGLE ACTION BUTTON -->
                     <button
-                      class="font_medium--600 setup-header payment_provider"
+                      class="font_medium--600 setup-header"
                       id="customize-payment__heading"
                       aria-expanded="false"
                       aria-controls="customize-payment__desc"
@@ -1450,6 +1492,7 @@
                       Set up a payment provider
                     </button>
                   </div>
+                  <!-- HIDDEN PART OF THE STEP -->
                   <div
                     class="setup_hidden"
                     id="customize-payment__desc"
@@ -1470,7 +1513,7 @@
                         </p>
                         <button
                           aria-label="Set up Payment"
-                          class="label-btn__dark font_small--400 payment"
+                          class="label-btn__dark font_small--400"
                           type="button"
                         >
                           Set up payment
@@ -1480,7 +1523,7 @@
                         <img
                           src="https://crushingit.tech/hackathon-assets/payment.png"
                           alt="Payment Gateway Image"
-                          title="Payment Gateway Image"
+                          aria-hidden="true"
                         />
                       </div>
                     </div>
@@ -1489,10 +1532,12 @@
               </div>
             </div>
           </div>
+          <!-- END OF ONBOARDING STEPS MODAL MAIN BODY -->
         </div>
+        <!-- END OF ONBAORDING STEPS -->
       </section>
     </main>
-
+    <!-- END OF MAIN CONTENTS -->
     <script src="./app.js"></script>
   </body>
 </html>
