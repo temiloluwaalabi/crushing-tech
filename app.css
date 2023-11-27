@@ -709,7 +709,9 @@ main {
   width: 100%;
   display: flex;
   height: auto;
+  transition: 0.3s ease-in-out;
 }
+
 .setup-body.hide .setup_body-one {
   position: absolute;
   width: 1px;
@@ -741,22 +743,8 @@ main {
   align-self: stretch;
   border-radius: 10px;
   height: auto;
-  transition: opacity 0.3s ease-out;
+  transition: opacity 0.3s ease-out max-height 0.3s ease-in;
 }
-
-/* .header-toggle__show.show .icon,
-.header-toggle__hide.hide .icon {
-  transform: rotate(180deg);
-} */
-
-/* .header-toggle__show[aria-expanded="true"] .icon {
-  transform: rotate(180deg);
-  transition: var(--transition-3);
-}
-.header-toggle__hide .icon {
-  transform: rotate(180deg);
-  transition: var(--transition-3);
-} */
 
 .header-toggle__show[aria-expanded="true"] .header-toggle__hide.icon {
   display: inline-block;
@@ -772,11 +760,11 @@ main {
 @keyframes stepDown {
   from {
     opacity: 0;
-    padding: 0; /* Adjust padding from 0 to the actual padding you desire */
+    max-height: 0;
   }
   to {
     opacity: 1;
-    padding: 8px 8px; /* Set the final padding */
+    max-height: auto;
   }
 }
 .customize.active-customize {
@@ -786,9 +774,11 @@ main {
   animation-name: stepDown;
   animation-duration: 0.3s;
 }
-/* .customize.checked {
-  height: 40px;
-} */
+.customize.active-customize .setup_hidden.show {
+  animation-name: stepDown;
+  animation-duration: 0.3s;
+}
+
 .customize_left {
   display: flex;
   flex-direction: column;
@@ -806,14 +796,6 @@ main {
 .setup-header {
   align-self: center;
 }
-/* .setup_hidden {
-  width: 100%;
-  overflow: hidden;
-  justify-content: space-between;
-  display: none;
-  padding-left: 34px;
-  gap: 96px;
-} */
 .setup_hidden {
   width: 100%;
   /* align-items: center; */
@@ -821,20 +803,12 @@ main {
   display: none;
   padding-left: 34px;
   max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
 }
 .active-customize .customize_left--title {
   padding-bottom: 5px;
 }
-/* .active-customize .setup_hidden {
-  max-height: 162px;
-} */
-.active-customize .setup_hidden {
+.active-customize .setup_hidden.show {
   max-height: 170px;
-}
-.customize .setup_hidden:nth-child(3) {
-  max-height: 200px !important;
 }
 .visually-hidden {
   position: absolute;
