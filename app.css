@@ -1152,6 +1152,7 @@ main {
   max-height: 170px;
   animation-name: stepDown;
   animation-duration: 0.3s;
+  transition: height 0.3s ease-in-out opacity 0.3s ease-in-out;
 }
 .visually-hidden {
   position: absolute;
