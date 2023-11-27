@@ -470,6 +470,9 @@ main {
   animation: modalXAni 0.3s ease-out;
   transition: opacity 0.3s ease-in-out;
 }
+.active-customize .setup_hidden:last-child {
+  padding-bottom: 20px;
+}
 .alert-body {
   display: flex;
   align-items: center;
