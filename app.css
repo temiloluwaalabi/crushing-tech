@@ -969,6 +969,7 @@ header {
 .user-section__name--dc {
   background-color: #36fba1;
   height: 28px;
+  width: 28px;
   padding: 9px 5px 10px 5px;
   border-radius: 6px;
   color: rgba(0, 0, 0, 0.4);
@@ -979,6 +980,10 @@ header {
   font-style: normal;
   font-weight: 500;
   line-height: 130%; /* 15.6px */
+}
+
+.user-section__name--dc:active {
+  border: 2px solid var(--pressed-bg) !important;
 }
 /* END OF HEADER STYLES */
 
