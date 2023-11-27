@@ -235,18 +235,41 @@ alertClose.addEventListener("click", () => {
 
 // refactor the key event for everything, check MDN to be sure
 
+function checkActive() {
+  hideActive = !headerToggleHide.classList.contains("hide");
+  showActive = headerToggleShow.classList.contains("show");
+  customize.forEach((item) => {
+    const content = item.querySelector(".setup_hidden");
+    if (content.classList.contains("show")) {
+      content.style.maxHeight = content.scrollHeight + "px";
+    } else {
+      content.style.maxHeight = 0;
+    }
+  });
+}
+
+// hideActive = !headerToggleHide.classList.contains("hide");
+// showActive = headerToggleShow.classList.contains("show");
+
+// if (hideActive) {
+//   setupBody.style.height = setupBody.scrollHeight + "px";
+// }
+
+checkActive();
+
 function toggleOpenSetupBody() {
   setupBody.classList.remove("hide");
-  setupBody.setAttribute("aria-hidden", "false");
-  setupToggleDiv.setAttribute("aria-expanded", "true");
-  headerToggleHide.setAttribute("aria-hidden", "true");
-  headerToggleShow.classList.remove("show");
-  statusCheck("Onboarding step opened");
-  // headerToggleShow.classList.remove("headerFocus");
-  headerToggleHide.classList.remove("hide");
-  headerToggleHide.querySelector(".icon").setAttribute("aria-hidden", "false");
-  headerToggleShow.querySelector(".icon").setAttribute("aria-hidden", "true");
   headerToggleHide.focus();
+  headerToggleShow.classList.remove("show");
+  headerToggleHide.querySelector(".icon").setAttribute("aria-hidden", "false");
+  statusCheck("Onboarding step opened");
+  if (showActive) {
+  }
+  // setupBody.setAttribute("aria-hidden", "false");
+  // setupToggleDiv.setAttribute("aria-expanded", "true");
+  // headerToggleHide.setAttribute("aria-hidden", "true");
+  headerToggleHide.classList.remove("hide");
+  headerToggleShow.querySelector(".icon").setAttribute("aria-hidden", "true");
   // headerToggleHide.classList.add("headerFocus");
 }
 // setupBody.addEventListener("keyup", (event) => {
@@ -271,26 +294,27 @@ headerToggleShow.addEventListener("keyup", (event) => {
 });
 function toggleCloseSetupBody() {
   setupBody.classList.add("hide");
-
-  setupBody.setAttribute("aria-hidden", "true");
-  setupToggleDiv.setAttribute("aria-expanded", "true");
+  headerToggleHide.classList.add("hide");
   headerToggleShow.classList.add("show");
-  statusCheck("Onboarding step closed");
+  headerToggleShow.focus();
+  if (setupBody.classList.contains("hide")) {
+    statusCheck("Onboarding step closed");
+  }
   headerToggleHide.querySelector(".icon").setAttribute("aria-hidden", "true");
   headerToggleShow.querySelector(".icon").setAttribute("aria-hidden", "false");
-  headerToggleShow.focus();
-  headerToggleHide.classList.add("hide");
 }
 
 headerToggleShow.addEventListener("click", toggleOpenSetupBody);
 
 function toggleBodyHeader(event) {
   const code = event.key;
-  const notExpanded = setupToggleDiv.getAttribute("aria-expanded") === "false";
+  const notExpanded =
+    headerToggleShow.getAttribute("aria-expanded") === "false";
   if (code === "Enter") {
     event.preventDefault();
     if (notExpanded) {
       toggleOpenSetupBody();
+      headerToggleShow.setAttribute("aria-expanded", "true");
     }
   }
 }
@@ -299,12 +323,12 @@ headerToggleShow.addEventListener("keyup", (event) => {
 });
 headerToggleHide.addEventListener("keyup", (event) => {
   const code = event.key;
-  const expanded = setupToggleDiv.getAttribute("aria-expanded") === "true";
+  const expanded = headerToggleShow.getAttribute("aria-expanded") === "true";
   if (code === "Escape") {
     event.preventDefault();
     if (expanded) {
+      headerToggleShow.setAttribute("aria-expanded", "false");
       toggleCloseSetupBody();
-      setupToggleDiv.setAttribute("aria-expanded", "false");
     }
   }
 });
@@ -326,6 +350,7 @@ function onBoardingSteps(item, content) {
       }
     });
     content.classList.add("show");
+    checkActive();
     header.setAttribute("aria-expanded", "true");
     announceVisibility(content);
     item.querySelector(".loader").focus();
@@ -387,6 +412,11 @@ function loadingState(load, index) {
   //hidden content
   const hiddenStep = grandParent.querySelector(".setup_hidden");
   if (!checkedElement) {
+    if (!loaderChecked.classList.contains("show")) {
+      load.addEventListener("focusin", () => {
+        load.ariaLabel = "Mark this step as complete";
+      });
+    }
     loaderEmpty.classList.add("hide");
     loaderLoading.classList.add("show");
     statusCheck("Loading, please wait!");
@@ -398,9 +428,10 @@ function loadingState(load, index) {
         blurCheck.classList.remove("show");
         loaderChecked.classList.add("rotate-dark-check");
         loaderChecked.classList.add("show");
-        statusCheck("Successfully marked this step as complete");
-        load.ariaLabel = "Mark this step as incomplete";
         grandParent.classList.add("checked");
+        if (grandParent.classList.contains("checked")) {
+          statusCheck("Successfully marked this step as complete");
+        }
         const nextStep = getNextUncheckedStep(currentIndex);
         if (nextStep) {
           customize.forEach((step) => {
@@ -417,7 +448,11 @@ function loadingState(load, index) {
           });
           const nextContent = nextStep.querySelector(".setup_hidden");
           nextContent.classList.add("show");
+          checkActive();
           nextStep.classList.add("active-customize");
+          if (nextStep.classList.contains("active-customize")) {
+            statusCheck("You're now on the next onboarding step");
+          }
           if (grandParent.classList.contains("active-customize")) {
             grandParent.classList.remove("active-customize");
           }
@@ -436,19 +471,22 @@ function loadingState(load, index) {
       }, 500);
     }, 1000);
   } else {
-    load.ariaLabel = "Mark this step as complete";
+    if (loaderChecked.classList.contains("show")) {
+      loaderChecked.addEventListener("focusin", () => {
+        load.ariaLabel = "Mark this step as incomplete";
+      });
+    }
     blurCheck.classList.remove("show");
     blurCheck.classList.remove("rotate-blur-check");
     loaderChecked.classList.remove("show");
-
     loaderLoading.classList.add("show");
     statusCheck("Loading... please wait!");
     setTimeout(() => {
       loaderLoading.classList.remove("show");
       loaderEmpty.classList.remove("hide");
-      statusCheck("Successfully marked this step as incomplete");
       loaderChecked.classList.remove("rotate-dark-check");
       if (!loaderEmpty.classList.contains("hide")) {
+        statusCheck("Successfully marked this step as incomplete");
         grandParent.classList.remove("active-customize");
         grandParent.classList.remove("checked");
       }
@@ -497,59 +535,115 @@ function loadingKeyState(load, event, index) {
     //hidden content
     const hiddenStep = grandParent.querySelector(".setup_hidden");
     if (!checkedElement) {
-      loaderEmpty.classList.add("hide");
-      loaderLoading.classList.add("show");
-      statusCheck("Loading, please wait!");
-      setTimeout(() => {
-        loaderLoading.classList.remove("show");
-        blurCheck.classList.add("show");
-        blurCheck.classList.add("rotate-blur-check");
+      if (!loaderChecked.classList.contains("show")) {
+        load.addEventListener("focusin", () => {
+          load.ariaLabel = "Mark this step as complete";
+        });
+        loaderEmpty.classList.add("hide");
+        loaderLoading.classList.add("show");
+        statusCheck("Loading, please wait!");
         setTimeout(() => {
-          blurCheck.classList.remove("show");
-          loaderChecked.classList.add("rotate-dark-check");
-          loaderChecked.classList.add("show");
-          statusCheck("Successfully marked this step as complete");
-          load.ariaLabel = "Mark this step as incomplete";
-          grandParent.classList.add("checked");
-          const nextStep = getNextUncheckedStep(currentIndex);
-
-          if (nextStep) {
-            customize.forEach((step) => {
-              if (step !== nextStep) {
-                if (step.classList.contains("active-customize")) {
-                  step.classList.remove("active-customize");
-                }
-                const content = step.querySelector(".setup_hidden");
-                if (content.classList.contains("show")) {
-                  content.classList.remove("show");
-                  step.classList.remove("active-customize");
-                }
-              }
-            });
-            const nextContent = nextStep.querySelector(".setup_hidden");
-            nextContent.classList.add("show");
-            nextStep.classList.add("active-customize");
-            nextStep.querySelector(".loader").focus();
-            if (grandParent.classList.contains("active-customize")) {
-              grandParent.classList.remove("active-customize");
+          loaderLoading.classList.remove("show");
+          blurCheck.classList.add("show");
+          blurCheck.classList.add("rotate-blur-check");
+          setTimeout(() => {
+            blurCheck.classList.remove("show");
+            loaderChecked.classList.add("rotate-dark-check");
+            loaderChecked.classList.add("show");
+            grandParent.classList.add("checked");
+            if (grandParent.classList.contains("checked")) {
+              statusCheck("Successfully marked this step as complete");
             }
-          }
+            const nextStep = getNextUncheckedStep(currentIndex);
 
+            if (nextStep) {
+              customize.forEach((step) => {
+                if (step !== nextStep) {
+                  if (step.classList.contains("active-customize")) {
+                    step.classList.remove("active-customize");
+                  }
+                  const content = step.querySelector(".setup_hidden");
+                  if (content.classList.contains("show")) {
+                    content.classList.remove("show");
+                    step.classList.remove("active-customize");
+                  }
+                }
+              });
+              const nextContent = nextStep.querySelector(".setup_hidden");
+              nextContent.classList.add("show");
+              checkActive();
+              nextStep.classList.add("active-customize");
+              if (nextStep.classList.contains("active-customize")) {
+                statusCheck("You're now on the next onboarding step");
+              }
+              nextStep.querySelector(".loader").focus();
+              if (grandParent.classList.contains("active-customize")) {
+                grandParent.classList.remove("active-customize");
+              }
+            }
+
+            if (!loaderEmpty.classList.contains("hide")) {
+              grandParent.classList.remove("active-customize");
+              grandParent.classList.remove("checked");
+            }
+            if (stepsCompletedCount < 5) {
+              stepsCompletedCount++;
+              updateSliderAndSteps(stepsCompletedCount);
+              if (stepsCompletedCount < 5) {
+                hiddenStep.classList.remove("show");
+              }
+            }
+          }, 500);
+        }, 1000);
+      } else {
+        if (loaderChecked.classList.contains("show")) {
+          loaderChecked.addEventListener("focusin", () => {
+            load.ariaLabel = "Mark this step as incomplete";
+          });
+        }
+        blurCheck.classList.remove("show");
+        blurCheck.classList.remove("rotate-blur-check");
+        loaderChecked.classList.remove("rotate-dark-check");
+        loaderChecked.classList.remove("show");
+        loaderLoading.classList.add("show");
+        statusCheck("Loading, Please wait!");
+        setTimeout(() => {
+          loaderLoading.classList.remove("show");
+          loaderEmpty.classList.remove("hide");
           if (!loaderEmpty.classList.contains("hide")) {
+            statusCheck("Successfully marked this step as incomplete");
             grandParent.classList.remove("active-customize");
             grandParent.classList.remove("checked");
           }
-          if (stepsCompletedCount < 5) {
-            stepsCompletedCount++;
+          if (checkedElement) {
+            stepsCompletedCount--;
             updateSliderAndSteps(stepsCompletedCount);
-            if (stepsCompletedCount < 5) {
+
+            if (stepsCompletedCount > 0) {
               hiddenStep.classList.remove("show");
+            } else {
+              if (stepsCompletedCount === 0) {
+                grandParent.classList.add("active-customize");
+                hiddenStep.classList.add("show");
+                customize.forEach((content) => {
+                  const hiddenContent = content.querySelector(".setup_hidden");
+                  if (hiddenStep !== hiddenContent) {
+                    hiddenContent.classList.remove("show");
+                    content.classList.remove("active-customize");
+                  }
+                });
+              }
             }
           }
-        }, 500);
-      }, 1000);
-    } else {
-      load.ariaLabel = "Mark this step as complete";
+        }, 300);
+      }
+    }
+    if (event.key === "Escape") {
+      if (loaderChecked.classList.contains("show")) {
+        loaderChecked.addEventListener("focusin", () => {
+          load.ariaLabel = "Mark this step as incomplete";
+        });
+      }
       blurCheck.classList.remove("show");
       blurCheck.classList.remove("rotate-blur-check");
       loaderChecked.classList.remove("rotate-dark-check");
@@ -559,8 +653,8 @@ function loadingKeyState(load, event, index) {
       setTimeout(() => {
         loaderLoading.classList.remove("show");
         loaderEmpty.classList.remove("hide");
-        statusCheck("Successfully marked this step as incomplete");
         if (!loaderEmpty.classList.contains("hide")) {
+          statusCheck("Successfully marked this step as incomplete");
           grandParent.classList.remove("active-customize");
           grandParent.classList.remove("checked");
         }
@@ -586,44 +680,6 @@ function loadingKeyState(load, event, index) {
         }
       }, 300);
     }
-  }
-  if (event.key === "Escape") {
-    load.ariaLabel = "Mark this step as complete";
-    blurCheck.classList.remove("show");
-    blurCheck.classList.remove("rotate-blur-check");
-    loaderChecked.classList.remove("rotate-dark-check");
-    loaderChecked.classList.remove("show");
-    loaderLoading.classList.add("show");
-    statusCheck("Loading, Please wait!");
-    setTimeout(() => {
-      loaderLoading.classList.remove("show");
-      loaderEmpty.classList.remove("hide");
-      statusCheck("Successfully marked this step as incomplete");
-      if (!loaderEmpty.classList.contains("hide")) {
-        grandParent.classList.remove("active-customize");
-        grandParent.classList.remove("checked");
-      }
-      if (checkedElement) {
-        stepsCompletedCount--;
-        updateSliderAndSteps(stepsCompletedCount);
-
-        if (stepsCompletedCount > 0) {
-          hiddenStep.classList.remove("show");
-        } else {
-          if (stepsCompletedCount === 0) {
-            grandParent.classList.add("active-customize");
-            hiddenStep.classList.add("show");
-            customize.forEach((content) => {
-              const hiddenContent = content.querySelector(".setup_hidden");
-              if (hiddenStep !== hiddenContent) {
-                hiddenContent.classList.remove("show");
-                content.classList.remove("active-customize");
-              }
-            });
-          }
-        }
-      }
-    }, 300);
   }
 }
 loader.forEach((load, index) => {

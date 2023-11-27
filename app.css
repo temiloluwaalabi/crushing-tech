@@ -678,10 +678,14 @@ main {
 }
 .header-toggle__show {
   display: none;
+
   border-radius: 6px;
+  transition: transform 0.3s ease-in-out; /* Add transition for arrow rotation */
 }
 .header-toggle__hide {
   border-radius: 6px;
+
+  transition: transform 0.3s ease-in-out; /* Add transition for arrow rotation */
 }
 /* END OF SETUP CARD HEADER */
 
@@ -691,8 +695,17 @@ main {
   width: 100%;
   display: flex;
   height: auto;
-
-  transition: height var(--transition-3);
+}
+.setup-body.hide .setup_body-one {
+  position: absolute;
+  width: 1px;
+  height: 0;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+  display: flex;
 }
 
 /*  */
@@ -703,11 +716,12 @@ main {
   justify-content: space-between;
   width: 100%;
   gap: 12px;
+  transition: height var(--transition-3);
 }
 .customize {
   width: 100%;
   display: flex;
-  padding: 12px 8px 12px 8px;
+  padding: 8px 8px 8px 8px;
   align-items: center;
   justify-content: space-between;
   align-self: stretch;
@@ -716,6 +730,31 @@ main {
   transition: opacity 0.3s ease-out;
 }
 
+/* .header-toggle__show.show .icon,
+.header-toggle__hide.hide .icon {
+  transform: rotate(180deg);
+} */
+
+/* .header-toggle__show[aria-expanded="true"] .icon {
+  transform: rotate(180deg);
+  transition: var(--transition-3);
+}
+.header-toggle__hide .icon {
+  transform: rotate(180deg);
+  transition: var(--transition-3);
+} */
+
+.header-toggle__show[aria-expanded="true"] .header-toggle__hide.icon {
+  display: inline-block;
+  transform: rotate(0deg); /* Reset rotation for arrow-down */
+}
+.header-toggle__show[aria-expanded="false"] .header-toggle__show.icon {
+  display: inline-block;
+  transform: rotate(180deg); /* Reset rotation for arrow-down */
+}
+
+/* Show arrow-up icon when collapsed */
+
 @keyframes stepDown {
   from {
     opacity: 0;
@@ -723,7 +762,7 @@ main {
   }
   to {
     opacity: 1;
-    padding: 12px 8px; /* Set the final padding */
+    padding: 8px 8px; /* Set the final padding */
   }
 }
 .customize.active-customize {
@@ -763,12 +802,19 @@ main {
 } */
 .setup_hidden {
   width: 100%;
-  overflow: hidden;
   /* align-items: center; */
   justify-content: space-between;
   display: none;
   padding-left: 34px;
-  gap: 96px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+.active-customize .customize_left--title {
+  padding-bottom: 5px;
+}
+.active-customize .setup_hidden {
+  max-height: 162px;
 }
 .visually-hidden {
   position: absolute;
@@ -790,19 +836,6 @@ main {
   margin: 0;
   clip: auto;
   overflow: visible;
-}
-
-.setup-body.hide {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-  display: flex;
-  gap: 96px;
 }
 
 /* loaders */
