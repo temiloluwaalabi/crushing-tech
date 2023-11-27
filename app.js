@@ -274,14 +274,15 @@ function statusCheck(content) {
 function toggleBodyHeader(event) {
   const code = event.key;
   const notExpanded = isAttributeEqualTo(
-    elements.setupToggleDiv,
+    elements.headerToggleShow,
     "aria-expanded",
     "false"
   );
   if (code === "Enter") {
     event.preventDefault();
     if (notExpanded) {
-      hideSetupBody();
+      toggleSetupBody();
+      removeClass(elements.headerToggleShow, "show");
       elements.headerToggleShow.setAttribute("aria-expanded", "true");
     }
   }
@@ -313,6 +314,8 @@ function handleHeaderShowToggleKeyUp(event) {
     event.preventDefault();
     if (!isShowing) {
       removeClass(elements.setupBody, "hide");
+      removeClass(elements.headerToggleShow, "show");
+      removeClass(elements.headerToggleHide, "hide");
     }
   }
 }
