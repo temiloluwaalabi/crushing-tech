@@ -756,11 +756,9 @@ main {
 @keyframes stepDown {
   from {
     opacity: 0;
-    max-height: 0;
   }
   to {
     opacity: 1;
-    max-height: auto;
   }
 }
 .customize.active-customize {
