@@ -576,14 +576,10 @@ header {
   justify-content: flex-end;
   align-items: flex-start;
   gap: 8px;
-  flex: 1 0 0;
 }
 .user-section__notification {
   cursor: pointer;
-  width: 32px;
-  height: 32px;
-  padding: 8px;
-  gap: 8px;
+  padding: 6px;
   border-radius: 8px;
   background-color: var(--grey-200);
   transition: var(--transition-3);
@@ -1026,7 +1022,11 @@ main {
     display: none;
   }
   .user-section {
-    gap: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
   }
   .user-section__notification {
     background-color: transparent;
@@ -1052,12 +1052,16 @@ main {
 }
 
 @media screen and (max-width: 750px) {
+  .input-container {
+    max-width: 278px;
+    min-width: 220px;
+    margin-right: 10px;
+  }
 }
 
 @media screen and (max-width: 550px) {
   .input-container {
-    width: 238px;
-    margin-left: 10px;
+    width: 248px;
   }
   .alert-body {
     flex-direction: column;
@@ -1085,25 +1089,31 @@ main {
 }
 @media screen and (max-width: 390px) {
   .input-container {
+    width: 220px;
+    margin-left: 10px;
+  }
+  .toaster {
+    left: 0;
+    top: 0;
     width: 100%;
-    margin-left: 8px;
+    padding: 12px 16px 12px 16px;
   }
   .toaster-user {
-    width: 250px;
+    width: 320px;
   }
-  .alert-toaster {
-    width: 290px;
-  }
+  /* .alert-toaster {
+    width: 100%;
+  } */
 }
-@media screen and (max-width: 300px) {
+@media screen and (max-width: 320px) {
   .input-container {
     display: none;
   }
   .toaster-user {
-    width: 240px;
+    width: 280px;
   }
   .alert-toaster {
-    width: 98%;
+    width: 100%;
   }
   .button_container {
     width: 100%;
