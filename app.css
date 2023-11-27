@@ -1048,7 +1048,7 @@ main {
 .setup-body {
   width: 100%;
   display: flex;
-  height: auto;
+  height: 100%;
   transition: 0.3s ease-in-out;
 }
 
@@ -1072,6 +1072,7 @@ main {
   justify-content: space-between;
   width: 100%;
   gap: 12px;
+  height: 100%;
   transition: height var(--transition-3);
 }
 .customize {
