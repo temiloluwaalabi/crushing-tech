@@ -827,8 +827,14 @@ main {
 .active-customize .customize_left--title {
   padding-bottom: 5px;
 }
-.active-customize .setup_hidden {
+/* .active-customize .setup_hidden {
   max-height: 162px;
+} */
+.active-customize .setup_hidden {
+  max-height: 170px;
+}
+.customize .setup_hidden:nth-child(3) {
+  max-height: 200px !important;
 }
 .visually-hidden {
   position: absolute;

@@ -238,14 +238,14 @@ alertClose.addEventListener("click", () => {
 function checkActive() {
   hideActive = !headerToggleHide.classList.contains("hide");
   showActive = headerToggleShow.classList.contains("show");
-  customize.forEach((item) => {
-    const content = item.querySelector(".setup_hidden");
-    if (content.classList.contains("show")) {
-      content.style.maxHeight = content.scrollHeight + "px";
-    } else {
-      content.style.maxHeight = 0;
-    }
-  });
+  // customize.forEach((item) => {
+  //   const content = item.querySelector(".setup_hidden");
+  //   if (content.classList.contains("show")) {
+  //     content.style.maxHeight = content.scrollHeight + "px";
+  //   } else {
+  //     content.style.maxHeight = 0;
+  //   }
+  // });
 }
 
 // hideActive = !headerToggleHide.classList.contains("hide");
