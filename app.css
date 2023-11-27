@@ -982,9 +982,6 @@ header {
   line-height: 130%; /* 15.6px */
 }
 
-.user-section__name--dc:active {
-  border: 2px solid var(--pressed-bg) !important;
-}
 /* END OF HEADER STYLES */
 
 /* --MAIN STYLING-- */
@@ -1057,10 +1054,10 @@ main {
   transition: 0.3s ease-in-out;
 }
 
-.setup-body.hide .setup_body-one {
+.setup-body.hide {
   position: absolute;
   width: 1px;
-  height: 0;
+  height: 1px;
   margin: -1px;
   padding: 0;
   overflow: hidden;
@@ -1089,7 +1086,6 @@ main {
   align-self: stretch;
   border-radius: 10px;
   height: auto;
-  transition: opacity 0.3s ease-out max-height 0.3s ease-in;
 }
 
 .header-toggle__show[aria-expanded="true"] .header-toggle__hide.icon {
@@ -1117,13 +1113,12 @@ main {
   overflow: hidden; /* Hidden by default */
   height: 100%;
   background: #f3f3f3;
+}
+/* .customize.active-customize .setup_hidden.show {
   animation-name: stepDown;
   animation-duration: 0.3s;
-}
-.customize.active-customize .setup_hidden.show {
-  animation-name: stepDown;
-  animation-duration: 0.3s;
-}
+   transition: var(--transition-3)
+} */
 
 .customize_left {
   display: flex;
@@ -1153,8 +1148,10 @@ main {
 .active-customize .customize_left--title {
   padding-bottom: 5px;
 }
-.active-customize .setup_hidden.show {
+.setup_hidden.show {
   max-height: 170px;
+  animation-name: stepDown;
+  animation-duration: 0.3s;
 }
 .visually-hidden {
   position: absolute;
@@ -1246,14 +1243,12 @@ main {
 }
 
 .blur_check {
-  transform-origin: center;
   transition: transform 0.5s ease-in-out;
-  transform-origin: center center; /* Set the transformation origin */
+  transform-origin: center; /* Set the transformation origin */
 }
 .loader_checked {
   transform-origin: center;
   transition: transform 0.5s ease-in-out;
-  transform-origin: center center; /* Set the transformation origin */
 }
 
 .loader:focus-within .loader_checked {
@@ -1440,6 +1435,9 @@ main {
   .customize_left--title {
     /* background-color: black; */
     padding-bottom: 4px;
+  }
+  .user-section__name:active {
+    background: transparent;
   }
 }
 @media screen and (max-width: 390px) {
