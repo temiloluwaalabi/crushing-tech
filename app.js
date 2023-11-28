@@ -363,8 +363,10 @@ function getNextUncheckedStep(elements, currentIndex) {
 function hideAllTabs(content) {
   elements.customize.forEach((tab) => {
     const hiddenContent = tab.querySelector(".setup_hidden");
+    const tabLoader = tab.querySelector(".loader");
     if (hiddenContent !== content) {
       removeClass(hiddenContent, "show");
+      setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
       setAttribute(tab, "aria-expanded", "false");
     }
@@ -495,10 +497,11 @@ function handleNextSteps(elements, currentIndex) {
   elements.blurCheck.classList.remove("show");
   elements.loaderChecked.classList.add("rotate-dark-check");
   elements.loaderChecked.classList.add("show");
-  elements.grandParent.classList.add("checked");
   if (elements.grandParent.classList.contains("checked")) {
     statusCheck("Successfully marked this step as complete");
   }
+  elements.grandParent.classList.add("checked");
+  // const hasChecked =
   setTimeout(() => {
     const nextStep = getNextUncheckedStep(elements, currentIndex);
     if (nextStep) {
