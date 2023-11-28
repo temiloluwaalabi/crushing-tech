@@ -27,15 +27,6 @@ const elements = {
   range: document.querySelector(".footer-range"),
 };
 
-elements.customize.forEach((item) => {
-  if (!item.classList.contains("active-customize")) {
-    setAriaLabel(
-      item.querySelector(".setup_header"),
-      "Click to expanded this step"
-    );
-  }
-});
-
 // Utility Functions
 const toggleClass = (element, className) => {
   element.classList.toggle(className);
@@ -71,6 +62,15 @@ function toggleNotification() {
 }
 let stepsCompletedCount = 0;
 
+elements.customize.forEach((item) => {
+  if (!item.classList.contains("active-customize")) {
+    setAriaLabel(
+      item.querySelector(".setup_header"),
+      "Click to expanded this step"
+    );
+  }
+});
+
 // Click Event Listeners
 elements.alertClose.addEventListener("click", hideAlert);
 elements.headerToggleShow.addEventListener("click", toggleSetupBody);
@@ -87,22 +87,26 @@ elements.notification.addEventListener("click", toggleNotificationToasterBody);
 // Key event listeners
 elements.userToaster.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     toggleUserToasterBody();
   }
 });
 elements.notification.addEventListener("keyup", (event) => {
   if (event.key === "Escape") {
+    event.preventDefault();
     closeMenu(elements.notification, elements.notificationToaster);
     elements.notification.focus();
   }
 });
 elements.notification.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     addClass(elements.notificationToaster, "show");
   }
 });
 elements.alertClose.addEventListener("keyup", (event) => {
   if (event.key === "Enter") {
+    event.preventDefault();
     hideAlert();
   }
 });
