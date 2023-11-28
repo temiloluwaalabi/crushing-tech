@@ -511,6 +511,11 @@ function updateSliderAndSteps(steps) {
     "aria-valuetext",
     `${steps} out of ${total} completed`
   );
+  setAttribute(
+    elements.range,
+    "aria-label",
+    `${steps} out of ${total} completed`
+  );
 }
 // function to open menu
 function openMenu() {
@@ -616,7 +621,7 @@ function handleNextSteps(elements, currentIndex) {
         }
       }
     }
-  }, 1500);
+  }, 1900);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
@@ -632,6 +637,7 @@ function handleStepsCompleted(elements) {
   }
 }
 function setIncompleteState(elements) {
+  setAriaLabel(elements.loader, "Mark this step as incomplete");
   removeClass(elements.blurCheck, "show");
   removeClass(elements.blurCheck, "rotate-blur-check");
   removeClass(elements.loaderChecked, "show");
@@ -661,6 +667,11 @@ function handleIncompleteSteps(elements, checkedElement) {
       if (stepsCompletedCount === 0) {
         addClass(elements.grandParent, "active-customize");
         addClass(elements.hiddenStep, "show");
+        setAttribute(
+          elements.grandParent.querySelector(".setup_header"),
+          "aria-expanded",
+          "true"
+        );
         elements.customize.forEach((content) => {
           const hiddenContent = content.querySelector(".setup_hidden");
           if (elements.hiddenStep !== hiddenContent) {
@@ -720,15 +731,10 @@ function loadingState(load, index) {
   const checkedLoader = hasClass(elements.loaderChecked, "show");
   const checkedElement = hasClass(elements.loaderChecked, "show");
   if (!checkedElement) {
-    if (!checkedLoader) {
-      load.addEventListener("focusin", () => {
-        setAriaLabel(load, "Mark this step as complete");
-      });
-      setLoadingState(elements);
-      setTimeout(() => {
-        setSuccessState(elements, currentIndex);
-      }, 1000);
-    }
+    setLoadingState(elements);
+    setTimeout(() => {
+      setSuccessState(elements, currentIndex);
+    }, 1000);
   } else {
     setIncompleteState(elements);
     setTimeout(() => {
