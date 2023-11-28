@@ -431,7 +431,7 @@ function hideAllTabs(content) {
       removeClass(hiddenContent, "show");
       // setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
-      setAttribute(tabHeader, "aria-expanded", "false");
+      // setAttribute(tabHeader, "aria-expanded", "false");
       // setAriaLabel(tabHeader, "");
     }
   });
@@ -616,7 +616,7 @@ function handleNextSteps(elements, currentIndex) {
         }
       }
     }
-  }, 1400);
+  }, 2000);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
