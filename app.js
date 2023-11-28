@@ -378,11 +378,18 @@ function onBoardingSteps(item, content) {
     hideAllTabs(content);
   }
   addClass(content, "show");
+  const loader = item.querySelector(".loader");
   checkActive();
   setAttribute(header, "aria-expanded", "true");
   // announceVisibility(content);
-  item.querySelector(".loader").focus();
   addClass(item, "active-customize");
+  item.querySelector(".loader").focus();
+  const checked = hasClass(item, "checked");
+  if (checked) {
+    setAriaLabel(loader, "Click this to mark this step as incomplete");
+  } else {
+    setAriaLabel(loader, "Click this to mark this step as complete");
+  }
   item.style.animationName = "none";
 }
 // this function is meant to control the animation
@@ -492,32 +499,34 @@ function handleNextSteps(elements, currentIndex) {
   if (elements.grandParent.classList.contains("checked")) {
     statusCheck("Successfully marked this step as complete");
   }
-  const nextStep = getNextUncheckedStep(elements, currentIndex);
-  if (nextStep) {
-    elements.customize.forEach((step) => {
-      if (step !== nextStep) {
-        if (step.classList.contains("active-customize")) {
-          removeClass(step, "active-customize");
+  setTimeout(() => {
+    const nextStep = getNextUncheckedStep(elements, currentIndex);
+    if (nextStep) {
+      elements.customize.forEach((step) => {
+        if (step !== nextStep) {
+          if (step.classList.contains("active-customize")) {
+            removeClass(step, "active-customize");
+          }
+          const notNextStepContent = step.querySelector(".setup_hidden");
+          if (notNextStepContent.classList.contains("show")) {
+            removeClass(notNextStepContent, "show");
+            removeClass(step, "active-customize");
+          }
         }
-        const notNextStepContent = step.querySelector(".setup_hidden");
-        if (notNextStepContent.classList.contains("show")) {
-          removeClass(notNextStepContent, "show");
-          removeClass(step, "active-customize");
-        }
+      });
+      const nextStepContent = nextStep.querySelector(".setup_hidden");
+      addClass(nextStepContent, "show");
+      checkActive();
+      addClass(nextStep, "active-customize");
+      if (nextStep.classList.contains("active-customize")) {
+        statusCheck("You're now on the next onboarding step");
       }
-    });
-    const nextStepContent = nextStep.querySelector(".setup_hidden");
-    addClass(nextStepContent, "show");
-    checkActive();
-    addClass(nextStep, "active-customize");
-    if (nextStep.classList.contains("active-customize")) {
-      statusCheck("You're now on the next onboarding step");
+      nextStep.querySelector(".loader").focus();
+      if (elements.grandParent.classList.contains("active-customize")) {
+        removeClass(elements.grandParent, "active-customize");
+      }
     }
-    nextStep.querySelector(".loader").focus();
-    if (elements.grandParent.classList.contains("active-customize")) {
-      removeClass(elements.grandParent, "active-customize");
-    }
-  }
+  }, 200);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
@@ -548,7 +557,9 @@ function setIncompleteSuccessState(elements, checkedElement) {
     removeClass(elements.grandParent, "active-customize");
     removeClass(elements.grandParent, "checked");
   }
-  handleIncompleteSteps(elements, checkedElement);
+  setTimeout(() => {
+    handleIncompleteSteps(elements, checkedElement);
+  }, 200);
 }
 function handleIncompleteSteps(elements, checkedElement) {
   if (checkedElement) {
