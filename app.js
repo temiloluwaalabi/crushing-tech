@@ -134,10 +134,16 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
     if (isLastMenuItem) {
       list.item(0).focus();
       if (list.item(0).classList.contains("checked")) {
-        setAriaLabel(list.item(0), "Mark this step as incomplete");
+        setAriaLabel(
+          list.item(0).querySelector(".loader"),
+          "Mark this step as incomplete"
+        );
       }
       if (!list.item(0).classList.contains("checked")) {
-        setAriaLabel(list.item(0), "Mark this step as complete");
+        setAriaLabel(
+          list.item(0).querySelector(".loader"),
+          "Mark this step as complete"
+        );
       }
       return;
     }
@@ -150,22 +156,31 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
       list.item(list.length - 1).focus();
       if (list.item(list.length - 1).classList.contains("checked")) {
         setAriaLabel(
-          list.item(list.length - 1),
+          list.item(list.length - 1).querySelector(".loader"),
           "Mark this step as incomplete"
         );
       }
       if (!list.item(list.length - 1).classList.contains("checked")) {
-        setAriaLabel(list.item(list.length - 1), "Mark this step as complete");
+        setAriaLabel(
+          list.item(list.length - 1).querySelector(".loader"),
+          "Mark this step as complete"
+        );
       }
       // isLastMenuItem.focus();
       return;
     }
     previousMenuItem.focus();
     if (previousMenuItem.classList.contains("checked")) {
-      setAriaLabel(previousMenuItem, "Mark this step as incomplete");
+      setAriaLabel(
+        previousMenuItem.querySelector(".loader"),
+        "Mark this step as incomplete"
+      );
     }
     if (!previousMenuItem.classList.contains("checked")) {
-      setAriaLabel(previousMenuItem, "Mark this step as complete");
+      setAriaLabel(
+        previousMenuItem.querySelector(".loader"),
+        "Mark this step as complete"
+      );
     }
   }
 }
@@ -480,7 +495,6 @@ function updateSliderAndSteps(steps) {
     "aria-valuetext",
     `${steps} out of ${total} completed`
   );
-  statusCheck(`${steps} out of ${total} completed`);
 }
 // function to open menu
 function openMenu() {
