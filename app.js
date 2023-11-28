@@ -398,10 +398,10 @@ function hideAllTabs(content) {
     const tabHeader = tab.querySelector(".setup_header");
     if (hiddenContent !== content) {
       removeClass(hiddenContent, "show");
-      setAriaLabel(tabLoader, "");
+      // setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
       setAttribute(tab, "aria-expanded", "false");
-      setAriaLabel(tabHeader, "");
+      // setAriaLabel(tabHeader, "");
     }
   });
 }
