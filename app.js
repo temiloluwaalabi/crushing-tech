@@ -667,13 +667,13 @@ function handleIncompleteSteps(elements, checkedElement) {
       if (stepsCompletedCount === 0) {
         addClass(elements.grandParent, "active-customize");
         addClass(elements.hiddenStep, "show");
-        setAttribute(
-          elements.grandParent.querySelector(".setup_header"),
-          "aria-expanded",
-          "true"
-        );
         elements.customize.forEach((content) => {
           const hiddenContent = content.querySelector(".setup_hidden");
+          setAttribute(
+            content.querySelector(".setup_header"),
+            "aria-expanded",
+            "true"
+          );
           if (elements.hiddenStep !== hiddenContent) {
             removeClass(hiddenContent, "show");
             removeClass(content, "active-customize");
