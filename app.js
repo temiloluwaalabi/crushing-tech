@@ -497,12 +497,11 @@ function handleNextSteps(elements, currentIndex) {
   elements.blurCheck.classList.remove("show");
   elements.loaderChecked.classList.add("rotate-dark-check");
   elements.loaderChecked.classList.add("show");
-  if (elements.grandParent.classList.contains("checked")) {
-    statusCheck("Successfully marked this step as complete");
-  }
-  // const hasChecked =
   setTimeout(() => {
     elements.grandParent.classList.add("checked");
+    if (elements.grandParent.classList.contains("checked")) {
+      statusCheck("Successfully marked this step as complete");
+    }
     if (elements.grandParent.classList.contains("checked")) {
       const nextStep = getNextUncheckedStep(elements, currentIndex);
       if (nextStep) {
@@ -520,11 +519,11 @@ function handleNextSteps(elements, currentIndex) {
         });
         const nextStepContent = nextStep.querySelector(".setup_hidden");
         addClass(nextStepContent, "show");
-        checkActive();
-        addClass(nextStep, "active-customize");
         if (nextStep.classList.contains("active-customize")) {
           statusCheck("You're now on the next onboarding step");
         }
+        checkActive();
+        addClass(nextStep, "active-customize");
         nextStep.querySelector(".loader").focus();
         setAriaLabel(
           nextStep.querySelector(".loader"),
