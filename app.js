@@ -407,7 +407,6 @@ checkActive();
 elements.customize.forEach((item) => {
   const header = item.querySelector(".setup-header");
   const content = item.querySelector(".setup_hidden");
-
   const handleStepClick = () => {
     onBoardingSteps(item, content);
   };
