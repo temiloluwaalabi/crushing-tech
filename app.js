@@ -128,6 +128,11 @@ elements.headerToggleShow.addEventListener(
 
 // Main- Functions
 // Function for arrow key left, right, up, and down navigation
+elements.setupHeader.addEventListener("focus", function (event) {
+  if (event.target.getAttribute("aria-expaded") === null) {
+    event.target.setAttribute("aria-label", "Click or press enter to expand");
+  }
+});
 function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   const isLastMenuItem = menuItemIndex === list.length - 1;
   const isFirstMenuItem = menuItemIndex === 0;
@@ -667,7 +672,9 @@ function handleIncompleteSteps(elements, checkedElement) {
       if (stepsCompletedCount === 0) {
         addClass(elements.grandParent, "active-customize");
         addClass(elements.hiddenStep, "show");
-        setAttribute(elements.setupHeader, "aria-expanded", "true");
+        if (elements.grandParent.classList.contains("active-customize")) {
+          elements.setupHeader.setAttribute("aria-expanded", "true");
+        }
         elements.customize.forEach((content) => {
           const hiddenContent = content.querySelector(".setup_hidden");
           if (elements.hiddenStep !== hiddenContent) {
@@ -679,6 +686,7 @@ function handleIncompleteSteps(elements, checkedElement) {
     }
   }
 }
+
 function handleEnterKey(
   elements,
   checkedElement,
