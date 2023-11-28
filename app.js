@@ -401,7 +401,7 @@ function hideAllTabs(content) {
       setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
       setAttribute(tab, "aria-expanded", "false");
-      setAriaLabel(tabHeader, " ");
+      setAriaLabel(tabHeader, "");
     }
   });
 }
