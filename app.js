@@ -27,6 +27,15 @@ const elements = {
   range: document.querySelector(".footer-range"),
 };
 
+elements.customize.forEach((item) => {
+  if (!item.classList.contains("active-customize")) {
+    setAriaLabel(
+      item.querySelector(".setup_header"),
+      "Click to expanded this step"
+    );
+  }
+});
+
 // Utility Functions
 const toggleClass = (element, className) => {
   element.classList.toggle(className);
@@ -273,6 +282,7 @@ function hideSetupBody() {
   addClass(elements.setupBody, "hide");
   addClass(elements.headerToggleHide, "hide");
   addClass(elements.headerToggleShow, "show");
+  setAttribute(elements.headerToggleShow, "aria-expanded", "false");
   elements.headerToggleShow.focus();
   // setAttribute(elements.setupToggleDiv,"aria-expanded", "false");
   if (hasClass(elements.setupBody, "hide")) {
@@ -415,7 +425,7 @@ function hideAllTabs(content) {
       removeClass(hiddenContent, "show");
       // setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
-      setAttribute(tab, "aria-expanded", "false");
+      setAttribute(tabHeader, "aria-expanded", "false");
       // setAriaLabel(tabHeader, "");
     }
   });
@@ -600,7 +610,7 @@ function handleNextSteps(elements, currentIndex) {
         }
       }
     }
-  }, 1000);
+  }, 1400);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
