@@ -63,15 +63,15 @@ function toggleNotification() {
 }
 let stepsCompletedCount = 0;
 
-elements.customize.forEach((item) => {
-  if (!item.classList.contains("active-customize")) {
-    setAttribute(
-      item.querySelector(".setup_header"),
-      "aria-label",
-      "Click to expanded this step"
-    );
-  }
-});
+// elements.setupHeader.forEach((item) => {
+//   item.addEventListener("focusin", () => {
+//     setAttribute(
+//       item.querySelector(".setup_header"),
+//       "aria-label",
+//       "Click to expanded this step"
+//     );
+//   });
+// });
 
 // Click Event Listeners
 elements.alertClose.addEventListener("click", hideAlert);
