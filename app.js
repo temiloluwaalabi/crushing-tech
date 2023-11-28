@@ -117,27 +117,27 @@ elements.headerToggleShow.addEventListener(
 
 // Main- Functions
 elements.setupHeader.forEach((item) => {
-  item.addEventListener("focus", function (event) {
-    if (event.target.getAttribute("aria-expaded") === null) {
-      // event.target.setAttribute("aria-label", "Click or press enter to expand");
-      statusCheck("Click or press enter to expand");
+  item.addEventListener("focusin", function (event) {
+    const isTrue = isAttributeEqualTo(item, "aria-expanded", "false");
+    if (isTrue) {
+      setAriaLabel(item, "Click or press enter to expand");
+      // statusCheck("Click or press enter to expand");
+    } else {
+      setAriaLabel(item, "");
     }
   });
 });
-function ArialLabel() {
-  elements.loader.forEach((item) => {
-    const isAril = item
-      .querySelector(".loader_checked")
-      .classList.contains("show");
-    if (!isAril) {
-      setAriaLabel(item, "Mark this step as complete");
-    }
-    if (isAril) {
-      setAriaLabel(item, "Mark this step as incomplete");
-    }
-  });
-}
-ArialLabel();
+// function ArialLabel() {
+//   elements.loader.forEach((item) => {
+//     const isAril = item
+//       .querySelector(".loader_checked")
+//       .classList.contains("show");
+//     if (!isAril) {
+//       setAriaLabel(item, " mark this step as complete");
+//     }
+//   });
+// }
+// ArialLabel();
 
 // Function for arrow key left, right, up, and down navigation
 
@@ -150,29 +150,29 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   if (event.key === "Home") {
     event.preventDefault();
     list.item(0).focus();
-    if (list.item(0).classList.contains("checked")) {
-      setAriaLabel(list.item(0), "Mark this step as incomplete");
-    }
-    if (!list.item(0).classList.contains("checked")) {
-      setAriaLabel(list.item(0), "Mark this step as complete");
-    }
+    // if (list.item(0).classList.contains("checked")) {
+    //   setAriaLabel(list.item(0), "Mark this step as incomplete");
+    // }
+    // if (!list.item(0).classList.contains("checked")) {
+    //   setAriaLabel(list.item(0), "Mark this step as complete");
+    // }
   }
   if (event.key === "ArrowRight" || event.key === "ArrowDown") {
     event.preventDefault();
     if (isLastMenuItem) {
       list.item(0).focus();
-      if (list.item(0).classList.contains("checked")) {
-        setAriaLabel(
-          list.item(0).querySelector(".loader"),
-          "Mark this step as incomplete"
-        );
-      }
-      if (!list.item(0).classList.contains("checked")) {
-        setAriaLabel(
-          list.item(0).querySelector(".loader"),
-          "Mark this step as complete"
-        );
-      }
+      // if (list.item(0).classList.contains("checked")) {
+      //   setAriaLabel(
+      //     list.item(0).querySelector(".loader"),
+      //     "Mark this step as incomplete"
+      //   );
+      // }
+      // if (!list.item(0).classList.contains("checked")) {
+      //   setAriaLabel(
+      //     list.item(0).querySelector(".loader"),
+      //     "Mark this step as complete"
+      //   );
+      // }
       return;
     }
     nextMenuItem.focus();
@@ -182,34 +182,28 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
     event.preventDefault();
     if (isFirstMenuItem) {
       list.item(list.length - 1).focus();
-      if (list.item(list.length - 1).classList.contains("checked")) {
-        setAriaLabel(
-          list.item(list.length - 1).querySelector(".loader"),
-          "Mark this step as incomplete"
-        );
-      }
-      if (!list.item(list.length - 1).classList.contains("checked")) {
-        setAriaLabel(
-          list.item(list.length - 1).querySelector(".loader"),
-          "Mark this step as complete"
-        );
-      }
+      // if (!list.item(list.length - 1).classList.contains("checked")) {
+      //   setAriaLabel(
+      //     list.item(list.length - 1).querySelector(".loader"),
+      //     "Mark this step as complete"
+      //   );
+      // }
       // isLastMenuItem.focus();
       return;
     }
     previousMenuItem.focus();
-    if (previousMenuItem.classList.contains("checked")) {
-      setAriaLabel(
-        previousMenuItem.querySelector(".loader"),
-        "Mark this step as incomplete"
-      );
-    }
-    if (!previousMenuItem.classList.contains("checked")) {
-      setAriaLabel(
-        previousMenuItem.querySelector(".loader"),
-        "Mark this step as complete"
-      );
-    }
+    // if (previousMenuItem.classList.contains("checked")) {
+    //   setAriaLabel(
+    //     previousMenuItem.querySelector(".loader"),
+    //     "Mark this step as incomplete"
+    //   );
+    // }
+    // if (!previousMenuItem.classList.contains("checked")) {
+    //   setAriaLabel(
+    //     previousMenuItem.querySelector(".loader"),
+    //     "Mark this step as complete"
+    //   );
+    // }
   }
 }
 // Handle User Toaster Escape Key
@@ -273,7 +267,7 @@ function hideAlert() {
     "aria-label",
     "You just closed the alert portal"
   );
-  statusCheck("You just closed the alert portal");
+  // statusCheck("You just closed the alert portal");
   setAttribute(elements.alertClose, "aria-hidden", "true");
   setAttribute(elements.alert, "aria-live", "off");
 }
@@ -318,16 +312,6 @@ function hideSetupBody() {
     "false"
   );
 }
-// function handleSetupBodyKeyup(event) {
-//   const code = event.key;
-//   if (code === "Home") {
-//     removeClass(elements.setupBody, "show")
-//     removeClass(elements.headerToggleHide, "show")
-//     removeClass(elements.headerToggleShow, "hide")
-//     setAttribute(elements.setupToggleDiv, "aria-expanded", "false")
-//     elements.headerToggleShow.focus();
-//   }
-// }
 // Function to announce the visibility change to screen readers
 // Function to annouce to screen readers
 function announceVisibility(label) {
@@ -543,9 +527,9 @@ function keyPress() {
   scrollDivs.item(0).focus();
   // scrollDivs.item(0).querySelector(".loader").focus();
   // if (scrollDivs.item(0).classList.contains("checked")) {
-  //   setAriaLabel(scrollDivs.item(0), "Mark this step as incomplete");
+  //   setAriaLabel(scrollDivs.item(0), " as incomplete");
   // } else {
-  //   setAriaLabel(scrollDivs.item(0), "Mark this step as complete");
+  //   setAriaLabel(scrollDivs.item(0), " as complete");
   // }
   scrollDivs.forEach((menuItem, menuItemIndex) => {
     menuItem.addEventListener("keyup", (event) => {
@@ -555,157 +539,6 @@ function keyPress() {
   });
 }
 keyPress();
-
-// generic function for the loading states
-function setLoadingState(elements) {
-  addClass(elements.loaderEmpty, "hide");
-  addClass(elements.loaderLoading, "show");
-  statusCheck("Loading, please wait!");
-}
-function setSuccessState(elements, currentIndex) {
-  removeClass(elements.loaderLoading, "show");
-  addClass(elements.blurCheck, "show");
-  addClass(elements.blurCheck, "rotate-blur-check");
-  setTimeout(() => {
-    handleNextSteps(elements, currentIndex);
-  }, 500);
-  handleStepsCompleted(elements);
-}
-function handleNextSteps(elements, currentIndex) {
-  elements.blurCheck.classList.remove("show");
-  elements.loaderChecked.classList.add("rotate-dark-check");
-  elements.loaderChecked.classList.add("show");
-  elements.grandParent.classList.add("checked");
-  if (elements.grandParent.classList.contains("checked")) {
-    statusCheck("Successfully marked this step");
-  }
-  ArialLabel();
-  setTimeout(() => {
-    if (elements.grandParent.classList.contains("checked")) {
-      const nextStep = getNextUncheckedStep(elements, currentIndex);
-      if (nextStep) {
-        elements.customize.forEach((step) => {
-          if (step !== nextStep) {
-            if (step.classList.contains("active-customize")) {
-              removeClass(step, "active-customize");
-            }
-            const notHeader = step.querySelector(".setup-header");
-            setAttribute(notHeader, "aria-expanded", "false");
-            const notNextStepContent = step.querySelector(".setup_hidden");
-            if (notNextStepContent.classList.contains("show")) {
-              removeClass(notNextStepContent, "show");
-              removeClass(step, "active-customize");
-            }
-          }
-        });
-        const nextStepContent = nextStep.querySelector(".setup_hidden");
-        addClass(nextStepContent, "show");
-        checkActive();
-        addClass(nextStep, "active-customize");
-        statusCheck("You're now on the next onboarding step");
-        const nextStepHeader = nextStep.querySelector(".setup-header");
-        setAttribute(nextStepHeader, "aria-expanded", "true");
-        nextStep.querySelector(".loader").focus();
-        if (nextStep.classList.contains("checked")) {
-          setAriaLabel(
-            nextStep.querySelector(".loader"),
-            "Mark this step as incomplete"
-          );
-        } else {
-          setAriaLabel(
-            nextStep.querySelector(".loader"),
-            "Mark this step as complete"
-          );
-        }
-        if (elements.grandParent.classList.contains("active-customize")) {
-          removeClass(elements.grandParent, "active-customize");
-        }
-      }
-    }
-  }, 2000);
-}
-function handleStepsCompleted(elements) {
-  if (!elements.loaderEmpty.classList.contains("hide")) {
-    removeClass(elements.grandParent, "active-customize");
-    removeClass(elements.grandParent, "checked");
-  }
-  if (stepsCompletedCount < 5) {
-    stepsCompletedCount++;
-    updateSliderAndSteps(stepsCompletedCount);
-    if (stepsCompletedCount < 5) {
-      removeClass(elements.hiddenStep, "show");
-    }
-  }
-}
-function setIncompleteState(elements, load) {
-  removeClass(elements.blurCheck, "show");
-  removeClass(elements.blurCheck, "rotate-blur-check");
-  removeClass(elements.loaderChecked, "show");
-  addClass(elements.loaderLoading, "show");
-  statusCheck("Loading... please wait!");
-}
-function setIncompleteSuccessState(elements, checkedElement) {
-  removeClass(elements.loaderLoading, "show");
-  removeClass(elements.loaderEmpty, "hide");
-  removeClass(elements.loaderChecked, "rotate-dark-check");
-  if (!elements.loaderEmpty.classList.contains("hide")) {
-    statusCheck("Successfully marked this step as incomplete");
-    removeClass(elements.grandParent, "active-customize");
-    removeClass(elements.grandParent, "checked");
-  }
-  setTimeout(() => {
-    handleIncompleteSteps(elements, checkedElement);
-  }, 200);
-}
-function handleIncompleteSteps(elements, checkedElement) {
-  if (checkedElement) {
-    stepsCompletedCount--;
-    updateSliderAndSteps(stepsCompletedCount);
-    if (stepsCompletedCount > 0) {
-      removeClass(elements.hiddenStep, "show");
-      setAttribute(elements.setupHeader, "aria-expanded", "false");
-    } else {
-      if (stepsCompletedCount === 0) {
-        addClass(elements.grandParent, "active-customize");
-        addClass(elements.hiddenStep, "show");
-        setAttribute(elements.setupHeader, "aria-expanded", "true");
-        elements.customize.forEach((content) => {
-          const hiddenContent = content.querySelector(".setup_hidden");
-          if (elements.hiddenStep !== hiddenContent) {
-            removeClass(hiddenContent, "show");
-            removeClass(content, "active-customize");
-          }
-        });
-      }
-    }
-  }
-}
-
-function handleEnterKey(
-  elements,
-  checkedElement,
-  currentIndex,
-  checkedLoader,
-  load
-) {
-  if (!checkedElement) {
-    // if (!checkedLoader) {
-    //   setAriaLabel(load, "Mark this step as complete");
-    // } else {
-    //   setAriaLabel(load, "Mark this step as incomplete");
-    // }
-    setLoadingState(elements);
-    setTimeout(() => {
-      setSuccessState(elements, currentIndex);
-    }, 1000);
-  }
-}
-function handleEscapeKey(elements, checkedElement, load) {
-  setIncompleteState(elements, checkedElement, load);
-  setTimeout(() => {
-    setIncompleteSuccessState(elements, checkedElement);
-  }, 300);
-}
 // Loader Click Event
 function loadingState(load, index) {
   const currentIndex = index;
@@ -727,18 +560,19 @@ function loadingState(load, index) {
         ".setup-header"
       ),
   };
-  const checkedLoader = hasClass(elements.loaderChecked, "show");
   const checkedElement = hasClass(elements.loaderChecked, "show");
   if (!checkedElement) {
     setLoadingState(elements);
     setTimeout(() => {
       setSuccessState(elements, currentIndex);
+      setAriaLabel(load, "");
     }, 800);
   } else {
+    setAriaLabel(load, "");
     setIncompleteState(elements, load);
     setTimeout(() => {
       setIncompleteSuccessState(elements, checkedElement);
-    }, 300);
+    }, 800);
   }
   removeClass(elements.loaderChecked, "rotate-dark-check");
   removeClass(elements.blurCheck, "rotate-blur-check");
@@ -768,8 +602,10 @@ function loadingKeyState(load, event, index) {
   const checkedElement = hasClass(elements.loaderChecked, "show");
   if (event.key === "Enter") {
     handleEnterKey(elements, checkedElement, currentIndex, checkedLoader, load);
+    setAriaLabel(load, "");
   }
   if (event.key === "Escape" && checkedElement) {
+    setAriaLabel(load, "");
     handleEscapeKey(elements, checkedElement, load);
   }
   removeClass(elements.loaderChecked, "rotate-dark-check");
@@ -786,3 +622,161 @@ elements.loader.forEach((load, index) => {
     loadingKeyState(load, event, index);
   });
 });
+
+// generic function for the loading states
+function setLoadingState(elements) {
+  addClass(elements.loaderEmpty, "hide");
+  addClass(elements.loaderLoading, "show");
+  statusCheck("Loading!");
+}
+function setSuccessState(elements, currentIndex, load) {
+  removeClass(elements.loaderLoading, "show");
+  addClass(elements.blurCheck, "show");
+  addClass(elements.blurCheck, "rotate-blur-check");
+  setTimeout(() => {
+    handleNextSteps(elements, currentIndex);
+  }, 500);
+  handleStepsCompleted(elements, load);
+}
+function handleNextSteps(elements, currentIndex) {
+  elements.blurCheck.classList.remove("show");
+  elements.loaderChecked.classList.add("rotate-dark-check");
+  elements.loaderChecked.classList.add("show");
+  elements.grandParent.classList.add("checked");
+  if (elements.grandParent.classList.contains("checked")) {
+    statusCheck("Successfully marked this step");
+  }
+  setTimeout(() => {
+    if (elements.grandParent.classList.contains("checked")) {
+      const nextStep = getNextUncheckedStep(elements, currentIndex);
+      if (nextStep) {
+        elements.customize.forEach((step) => {
+          if (step !== nextStep) {
+            if (step.classList.contains("active-customize")) {
+              removeClass(step, "active-customize");
+            }
+            const notHeader = step.querySelector(".setup-header");
+            setAttribute(notHeader, "aria-expanded", "false");
+            const notNextStepContent = step.querySelector(".setup_hidden");
+            if (notNextStepContent.classList.contains("show")) {
+              removeClass(notNextStepContent, "show");
+              removeClass(step, "active-customize");
+            }
+          }
+        });
+        const nextStepContent = nextStep.querySelector(".setup_hidden");
+        addClass(nextStepContent, "show");
+        checkActive();
+        addClass(nextStep, "active-customize");
+        // statusCheck("You're now on the next onboarding step");
+        const nextStepHeader = nextStep.querySelector(".setup-header");
+        setAttribute(nextStepHeader, "aria-expanded", "true");
+        nextStep.querySelector(".loader").focus();
+        if (nextStep.classList.contains("checked")) {
+          setAriaLabel(
+            nextStep.querySelector(".loader"),
+            "Mark this step as incomplete"
+          );
+        }
+        if (elements.grandParent.classList.contains("active-customize")) {
+          removeClass(elements.grandParent, "active-customize");
+        }
+        setAriaLabel(
+          elements.grandParent.querySelector(".loader"),
+          "Mark this step as incomplete"
+        );
+      }
+    }
+  }, 1900);
+}
+function handleStepsCompleted(elements, load, load) {
+  if (!elements.loaderEmpty.classList.contains("hide")) {
+    removeClass(elements.grandParent, "active-customize");
+    removeClass(elements.grandParent, "checked");
+  }
+  if (stepsCompletedCount < 5) {
+    stepsCompletedCount++;
+    updateSliderAndSteps(stepsCompletedCount);
+    if (stepsCompletedCount < 5) {
+      removeClass(elements.hiddenStep, "show");
+    }
+  }
+  setTimeout(() => {
+    if (stepsCompletedCount === 5) {
+      statusCheck("You've successfully marked all steps as complete");
+    }
+  }, 1200);
+}
+function setIncompleteState(elements, load) {
+  removeClass(elements.blurCheck, "show");
+  removeClass(elements.blurCheck, "rotate-blur-check");
+  removeClass(elements.loaderChecked, "show");
+  addClass(elements.loaderLoading, "show");
+  statusCheck("Loading!");
+}
+function setIncompleteSuccessState(elements, checkedElement) {
+  removeClass(elements.loaderLoading, "show");
+  removeClass(elements.loaderEmpty, "hide");
+  removeClass(elements.loaderChecked, "rotate-dark-check");
+  if (!elements.loaderEmpty.classList.contains("hide")) {
+    statusCheck("You've successfully unchecked this step");
+    removeClass(elements.grandParent, "active-customize");
+    removeClass(elements.grandParent, "checked");
+  }
+  setTimeout(() => {
+    handleIncompleteSteps(elements, checkedElement);
+  }, 500);
+}
+function handleIncompleteSteps(elements, checkedElement) {
+  if (checkedElement) {
+    stepsCompletedCount--;
+    updateSliderAndSteps(stepsCompletedCount);
+    if (stepsCompletedCount > 0) {
+      removeClass(elements.hiddenStep, "show");
+      setAttribute(elements.setupHeader, "aria-expanded", "false");
+    } else {
+      if (stepsCompletedCount === 0) {
+        addClass(elements.grandParent, "active-customize");
+        addClass(elements.hiddenStep, "show");
+        setAttribute(elements.setupHeader, "aria-expanded", "true");
+        statusCheck("You've successfully unchecked all steps");
+        elements.customize.forEach((content) => {
+          const hiddenContent = content.querySelector(".setup_hidden");
+          if (elements.hiddenStep !== hiddenContent) {
+            removeClass(hiddenContent, "show");
+            removeClass(content, "active-customize");
+          }
+        });
+      }
+    }
+    setAriaLabel(
+      elements.grandParent.querySelector(".loader"),
+      "Mark this step as complete"
+    );
+  }
+}
+function handleEnterKey(
+  elements,
+  checkedElement,
+  currentIndex,
+  checkedLoader,
+  load
+) {
+  if (!checkedElement) {
+    // if (!checkedLoader) {
+    //   setAriaLabel(load, " as complete");
+    // } else {
+    //   setAriaLabel(load, " as incomplete");
+    // }
+    setLoadingState(elements);
+    setTimeout(() => {
+      setSuccessState(elements, currentIndex, load);
+    }, 1000);
+  }
+}
+function handleEscapeKey(elements, checkedElement, load) {
+  setIncompleteState(elements, checkedElement, load);
+  setTimeout(() => {
+    setIncompleteSuccessState(elements, checkedElement);
+  }, 300);
+}

@@ -1352,10 +1352,10 @@ main {
   transition: 0.2s ease-in-out;
 }
 
-.setup-header:focus {
+/* .setup-header:focus {
   outline: none;
   border: none;
-}
+} */
 
 /* END OF SETUP CARD FOOTER */
 
