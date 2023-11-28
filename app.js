@@ -500,33 +500,39 @@ function handleNextSteps(elements, currentIndex) {
   if (elements.grandParent.classList.contains("checked")) {
     statusCheck("Successfully marked this step as complete");
   }
-  elements.grandParent.classList.add("checked");
   // const hasChecked =
   setTimeout(() => {
-    const nextStep = getNextUncheckedStep(elements, currentIndex);
-    if (nextStep) {
-      elements.customize.forEach((step) => {
-        if (step !== nextStep) {
-          if (step.classList.contains("active-customize")) {
-            removeClass(step, "active-customize");
+    elements.grandParent.classList.add("checked");
+    if (elements.grandParent.classList.contains("checked")) {
+      const nextStep = getNextUncheckedStep(elements, currentIndex);
+      if (nextStep) {
+        elements.customize.forEach((step) => {
+          if (step !== nextStep) {
+            if (step.classList.contains("active-customize")) {
+              removeClass(step, "active-customize");
+            }
+            const notNextStepContent = step.querySelector(".setup_hidden");
+            if (notNextStepContent.classList.contains("show")) {
+              removeClass(notNextStepContent, "show");
+              removeClass(step, "active-customize");
+            }
           }
-          const notNextStepContent = step.querySelector(".setup_hidden");
-          if (notNextStepContent.classList.contains("show")) {
-            removeClass(notNextStepContent, "show");
-            removeClass(step, "active-customize");
-          }
+        });
+        const nextStepContent = nextStep.querySelector(".setup_hidden");
+        addClass(nextStepContent, "show");
+        checkActive();
+        addClass(nextStep, "active-customize");
+        if (nextStep.classList.contains("active-customize")) {
+          statusCheck("You're now on the next onboarding step");
         }
-      });
-      const nextStepContent = nextStep.querySelector(".setup_hidden");
-      addClass(nextStepContent, "show");
-      checkActive();
-      addClass(nextStep, "active-customize");
-      if (nextStep.classList.contains("active-customize")) {
-        statusCheck("You're now on the next onboarding step");
-      }
-      nextStep.querySelector(".loader").focus();
-      if (elements.grandParent.classList.contains("active-customize")) {
-        removeClass(elements.grandParent, "active-customize");
+        nextStep.querySelector(".loader").focus();
+        setAriaLabel(
+          nextStep.querySelector(".loader"),
+          "Mark this step as complete"
+        );
+        if (elements.grandParent.classList.contains("active-customize")) {
+          removeClass(elements.grandParent, "active-customize");
+        }
       }
     }
   }, 200);
