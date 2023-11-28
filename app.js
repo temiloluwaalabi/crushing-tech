@@ -739,7 +739,6 @@ function handleIncompleteSteps(elements, checkedElement) {
         addClass(elements.grandParent, "active-customize");
         addClass(elements.hiddenStep, "show");
         setAttribute(elements.setupHeader, "aria-expanded", "true");
-        statusCheck("You've successfully unchecked all steps");
         elements.customize.forEach((content) => {
           const hiddenContent = content.querySelector(".setup_hidden");
           if (elements.hiddenStep !== hiddenContent) {
@@ -747,6 +746,7 @@ function handleIncompleteSteps(elements, checkedElement) {
             removeClass(content, "active-customize");
           }
         });
+        statusCheck("You've successfully unchecked all steps");
       }
     }
     setAriaLabel(
