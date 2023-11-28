@@ -636,8 +636,8 @@ function handleStepsCompleted(elements) {
     }
   }
 }
-function setIncompleteState(elements) {
-  setAriaLabel(elements.loader, "Mark this step as incomplete");
+function setIncompleteState(elements, load) {
+  setAriaLabel(load, "Mark this step as incomplete");
   removeClass(elements.blurCheck, "show");
   removeClass(elements.blurCheck, "rotate-blur-check");
   removeClass(elements.loaderChecked, "show");
@@ -706,7 +706,7 @@ function handleEscapeKey(elements, checkedElement, load) {
   if (checkedElement) {
     setAriaLabel(load, "Mark this step as incomplete");
   }
-  setIncompleteState(elements, checkedElement);
+  setIncompleteState(elements, checkedElement, load);
   setTimeout(() => {
     setIncompleteSuccessState(elements, checkedElement);
   }, 300);
@@ -736,7 +736,7 @@ function loadingState(load, index) {
       setSuccessState(elements, currentIndex);
     }, 1000);
   } else {
-    setIncompleteState(elements);
+    setIncompleteState(elements, load);
     setTimeout(() => {
       setIncompleteSuccessState(elements, checkedElement);
     }, 300);
