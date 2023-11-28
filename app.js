@@ -435,7 +435,8 @@ function hideAllTabs(content) {
     const hiddenContent = tab.querySelector(".setup_hidden");
     const tabLoader = tab.querySelector(".loader");
     const tabHeader = tab.querySelector(".setup_header");
-    if (tabHeader.getAttribute("aria-expanded") === true) {
+    const isTrue = isAttributeEqualTo(tabHeader, "aria-expanded", "true");
+    if (isTrue) {
       setAttribute(tabHeader, "aria-expanded", "false");
     }
     if (hiddenContent !== content) {
