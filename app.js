@@ -128,11 +128,14 @@ elements.headerToggleShow.addEventListener(
 
 // Main- Functions
 // Function for arrow key left, right, up, and down navigation
-elements.setupHeader.addEventListener("focus", function (event) {
-  if (event.target.getAttribute("aria-expaded") === null) {
-    event.target.setAttribute("aria-label", "Click or press enter to expand");
-  }
+elements.setupHeader.forEach((item) => {
+  item.addEventListener("focus", function (event) {
+    if (event.target.getAttribute("aria-expaded") === null) {
+      event.target.setAttribute("aria-label", "Click or press enter to expand");
+    }
+  });
 });
+
 function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   const isLastMenuItem = menuItemIndex === list.length - 1;
   const isFirstMenuItem = menuItemIndex === 0;
