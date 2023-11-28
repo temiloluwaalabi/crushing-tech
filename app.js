@@ -481,8 +481,8 @@ function setSuccessState(elements, currentIndex) {
   addClass(elements.blurCheck, "rotate-blur-check");
   setTimeout(() => {
     handleNextSteps(elements, currentIndex);
-    handleStepsCompleted(elements);
   }, 500);
+  handleStepsCompleted(elements);
 }
 function handleNextSteps(elements, currentIndex) {
   elements.blurCheck.classList.remove("show");
