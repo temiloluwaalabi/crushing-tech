@@ -401,7 +401,7 @@ function hideAllTabs(content) {
       setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
       setAttribute(tab, "aria-expanded", "false");
-      setAriaLabel(tabHeader, "");
+      setAriaLabel(tabHeader, " ");
     }
   });
 }
@@ -511,10 +511,9 @@ function keyPress() {
   const scrollDivs = elements.setupBodyDiv.querySelectorAll(".customize");
   scrollDivs.item(0).focus();
   scrollDivs.item(0).querySelector(".loader").focus();
-  if (scrollDivs.item(0).contains("checked")) {
+  if (scrollDivs.item(0).classList.contains("checked")) {
     setAriaLabel(scrollDivs.item(0), "Mark this step as incomplete");
-  }
-  {
+  } else {
     setAriaLabel(scrollDivs.item(0), "Mark this step as complete");
   }
   scrollDivs.forEach((menuItem, menuItemIndex) => {
