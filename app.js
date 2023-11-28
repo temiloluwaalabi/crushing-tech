@@ -616,7 +616,7 @@ function handleNextSteps(elements, currentIndex) {
         }
       }
     }
-  }, 2000);
+  }, 1500);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
