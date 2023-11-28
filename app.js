@@ -497,11 +497,11 @@ function handleNextSteps(elements, currentIndex) {
   elements.blurCheck.classList.remove("show");
   elements.loaderChecked.classList.add("rotate-dark-check");
   elements.loaderChecked.classList.add("show");
+  elements.grandParent.classList.add("checked");
+  if (elements.grandParent.classList.contains("checked")) {
+    statusCheck("Successfully marked this step as complete");
+  }
   setTimeout(() => {
-    elements.grandParent.classList.add("checked");
-    if (elements.grandParent.classList.contains("checked")) {
-      statusCheck("Successfully marked this step as complete");
-    }
     if (elements.grandParent.classList.contains("checked")) {
       const nextStep = getNextUncheckedStep(elements, currentIndex);
       if (nextStep) {
