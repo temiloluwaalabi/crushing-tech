@@ -49,6 +49,7 @@ const setAttribute = (element, attributeName, attributeValue) => {
 const setAriaLabel = (element, newLabel) => {
   element.setAttribute("aria-label", newLabel);
 };
+
 function toggleToaster(val1, val2, val3, val4) {
   removeClass(val2, "show");
   addClass(val3, "show");
@@ -64,8 +65,9 @@ let stepsCompletedCount = 0;
 
 elements.customize.forEach((item) => {
   if (!item.classList.contains("active-customize")) {
-    setAriaLabel(
+    setAttribute(
       item.querySelector(".setup_header"),
+      "aria-label",
       "Click to expanded this step"
     );
   }
