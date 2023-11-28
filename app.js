@@ -62,17 +62,6 @@ function toggleNotification() {
   removeClass(elements.toasterUser, "show");
 }
 let stepsCompletedCount = 0;
-
-// elements.setupHeader.forEach((item) => {
-//   item.addEventListener("focusin", () => {
-//     setAttribute(
-//       item.querySelector(".setup_header"),
-//       "aria-label",
-//       "Click to expanded this step"
-//     );
-//   });
-// });
-
 // Click Event Listeners
 elements.alertClose.addEventListener("click", hideAlert);
 elements.headerToggleShow.addEventListener("click", toggleSetupBody);
@@ -127,14 +116,30 @@ elements.headerToggleShow.addEventListener(
 );
 
 // Main- Functions
-// Function for arrow key left, right, up, and down navigation
 elements.setupHeader.forEach((item) => {
   item.addEventListener("focus", function (event) {
     if (event.target.getAttribute("aria-expaded") === null) {
-      event.target.setAttribute("aria-label", "Click or press enter to expand");
+      // event.target.setAttribute("aria-label", "Click or press enter to expand");
+      statusCheck("Click or press enter to expand");
     }
   });
 });
+function ArialLabel() {
+  elements.loader.forEach((item) => {
+    const isAril = item
+      .querySelector(".loader_checked")
+      .classList.contains("show");
+    if (!isAril) {
+      setAriaLabel(item, "Mark this step as complete");
+    }
+    if (isAril) {
+      setAriaLabel(item, "Mark this step as incomplete");
+    }
+  });
+}
+ArialLabel();
+
+// Function for arrow key left, right, up, and down navigation
 
 function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   const isLastMenuItem = menuItemIndex === list.length - 1;
@@ -337,6 +342,7 @@ function announceVisibility(label) {
 // another function to annouce to screen readers
 function statusCheck(content) {
   elements.hiddenMessage.ariaLabel = `${content}`;
+  console.log(elements.hiddenMessage);
   // Set focus to the hidden message to trigger screen reader announcement
   elements.hiddenMessage.focus();
 }
@@ -434,17 +440,15 @@ function hideAllTabs(content) {
   elements.customize.forEach((tab) => {
     const hiddenContent = tab.querySelector(".setup_hidden");
     const tabLoader = tab.querySelector(".loader");
-    const tabHeader = tab.querySelector(".setup_header");
+    const tabHeader = tab.querySelector(".setup-header");
     const isTrue = isAttributeEqualTo(tabHeader, "aria-expanded", "true");
     if (isTrue) {
       setAttribute(tabHeader, "aria-expanded", "false");
     }
     if (hiddenContent !== content) {
       removeClass(hiddenContent, "show");
-      // setAriaLabel(tabLoader, "");
+      setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
-      // setAttribute(tabHeader, "aria-expanded", "false");
-      // setAriaLabel(tabHeader, "");
     }
   });
 }
@@ -459,14 +463,11 @@ function onBoardingSteps(item, content) {
   const loader = item.querySelector(".loader");
   checkActive();
   setAttribute(header, "aria-expanded", "true");
-  // announceVisibility(content);
   addClass(item, "active-customize");
   item.querySelector(".loader").focus();
   const checked = hasClass(item, "checked");
   if (checked) {
     setAriaLabel(loader, "Click this to mark this step as incomplete");
-  } else {
-    setAriaLabel(loader, "Click this to mark this step as complete");
   }
   item.style.animationName = "none";
 }
@@ -474,18 +475,6 @@ function onBoardingSteps(item, content) {
 function checkActive() {
   hideActive = !elements.headerToggleHide.classList.contains("hide");
   showActive = elements.headerToggleShow.classList.contains("show");
-  // customize.forEach((item) => {
-  //   const content = item.querySelector(".setup_hidden");
-  //   if (content.classList.contains("show")) {
-  //     const padding =
-  //       parseInt(window.getComputedStyle(content).paddingTop, 10) +
-  //       parseInt(window.getComputedStyle(content).paddingBottom, 10);
-  //     const contentHeight = content.scrollHeight + padding;
-  //     content.style.height = "auto";
-  //   } else {
-  //     content.style.height = 0;
-  //   }
-  // });
 }
 checkActive();
 // the event listener for the onboarding steps
@@ -503,11 +492,6 @@ elements.customize.forEach((item) => {
   };
   header.addEventListener("click", handleStepClick);
   item.addEventListener("keyup", handleStepKeyup);
-  // item.addEventListener("keyup", (event) => {
-  //   item.querySelector(".setup_header").focus()
-  //   statusCheck("You can press enter to open this step")
-  //   handleStepKeyup(event)
-  // });
 });
 
 // Function to update slider and steps
@@ -557,12 +541,12 @@ function closeMenu(element, element2) {
 function keyPress() {
   const scrollDivs = elements.setupBodyDiv.querySelectorAll(".customize");
   scrollDivs.item(0).focus();
-  scrollDivs.item(0).querySelector(".loader").focus();
-  if (scrollDivs.item(0).classList.contains("checked")) {
-    setAriaLabel(scrollDivs.item(0), "Mark this step as incomplete");
-  } else {
-    setAriaLabel(scrollDivs.item(0), "Mark this step as complete");
-  }
+  // scrollDivs.item(0).querySelector(".loader").focus();
+  // if (scrollDivs.item(0).classList.contains("checked")) {
+  //   setAriaLabel(scrollDivs.item(0), "Mark this step as incomplete");
+  // } else {
+  //   setAriaLabel(scrollDivs.item(0), "Mark this step as complete");
+  // }
   scrollDivs.forEach((menuItem, menuItemIndex) => {
     menuItem.addEventListener("keyup", (event) => {
       event.preventDefault();
@@ -593,8 +577,9 @@ function handleNextSteps(elements, currentIndex) {
   elements.loaderChecked.classList.add("show");
   elements.grandParent.classList.add("checked");
   if (elements.grandParent.classList.contains("checked")) {
-    statusCheck("Successfully marked this step as complete");
+    statusCheck("Successfully marked this step");
   }
+  ArialLabel();
   setTimeout(() => {
     if (elements.grandParent.classList.contains("checked")) {
       const nextStep = getNextUncheckedStep(elements, currentIndex);
@@ -604,7 +589,7 @@ function handleNextSteps(elements, currentIndex) {
             if (step.classList.contains("active-customize")) {
               removeClass(step, "active-customize");
             }
-            const notHeader = step.querySelector(".setup_header");
+            const notHeader = step.querySelector(".setup-header");
             setAttribute(notHeader, "aria-expanded", "false");
             const notNextStepContent = step.querySelector(".setup_hidden");
             if (notNextStepContent.classList.contains("show")) {
@@ -618,7 +603,7 @@ function handleNextSteps(elements, currentIndex) {
         checkActive();
         addClass(nextStep, "active-customize");
         statusCheck("You're now on the next onboarding step");
-        const nextStepHeader = nextStep.querySelector(".setup_header");
+        const nextStepHeader = nextStep.querySelector(".setup-header");
         setAttribute(nextStepHeader, "aria-expanded", "true");
         nextStep.querySelector(".loader").focus();
         if (nextStep.classList.contains("checked")) {
@@ -637,7 +622,7 @@ function handleNextSteps(elements, currentIndex) {
         }
       }
     }
-  }, 1900);
+  }, 2000);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
@@ -653,7 +638,6 @@ function handleStepsCompleted(elements) {
   }
 }
 function setIncompleteState(elements, load) {
-  setAriaLabel(load, "Mark this step as incomplete");
   removeClass(elements.blurCheck, "show");
   removeClass(elements.blurCheck, "rotate-blur-check");
   removeClass(elements.loaderChecked, "show");
@@ -684,7 +668,7 @@ function handleIncompleteSteps(elements, checkedElement) {
       if (stepsCompletedCount === 0) {
         addClass(elements.grandParent, "active-customize");
         addClass(elements.hiddenStep, "show");
-        // setAttribute(elements.setupHeader, "aria-expanded", "false")
+        setAttribute(elements.setupHeader, "aria-expanded", "true");
         elements.customize.forEach((content) => {
           const hiddenContent = content.querySelector(".setup_hidden");
           if (elements.hiddenStep !== hiddenContent) {
@@ -705,11 +689,11 @@ function handleEnterKey(
   load
 ) {
   if (!checkedElement) {
-    if (!checkedLoader) {
-      setAriaLabel(load, "Mark this step as complete");
-    } else {
-      setAriaLabel(load, "Mark this step as incomplete");
-    }
+    // if (!checkedLoader) {
+    //   setAriaLabel(load, "Mark this step as complete");
+    // } else {
+    //   setAriaLabel(load, "Mark this step as incomplete");
+    // }
     setLoadingState(elements);
     setTimeout(() => {
       setSuccessState(elements, currentIndex);
@@ -717,9 +701,6 @@ function handleEnterKey(
   }
 }
 function handleEscapeKey(elements, checkedElement, load) {
-  if (checkedElement) {
-    setAriaLabel(load, "Mark this step as incomplete");
-  }
   setIncompleteState(elements, checkedElement, load);
   setTimeout(() => {
     setIncompleteSuccessState(elements, checkedElement);
@@ -743,7 +724,7 @@ function loadingState(load, index) {
       ),
     setupHeader:
       load.parentElement.parentElement.parentElement.querySelector(
-        ".setup_header"
+        ".setup-header"
       ),
   };
   const checkedLoader = hasClass(elements.loaderChecked, "show");
@@ -752,7 +733,7 @@ function loadingState(load, index) {
     setLoadingState(elements);
     setTimeout(() => {
       setSuccessState(elements, currentIndex);
-    }, 1000);
+    }, 800);
   } else {
     setIncompleteState(elements, load);
     setTimeout(() => {
@@ -780,7 +761,7 @@ function loadingKeyState(load, event, index) {
       ),
     setupHeader:
       load.parentElement.parentElement.parentElement.querySelector(
-        ".setup_header"
+        ".setup-header"
       ),
   };
   const checkedLoader = hasClass(elements.loaderChecked, "show");
