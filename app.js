@@ -122,10 +122,10 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   if (event.key === "Home") {
     event.preventDefault();
     list.item(0).focus();
-    if (list.item(0).contains("checked")) {
+    if (list.item(0).classList.contains("checked")) {
       setAriaLabel(list.item(0), "Mark this step as incomplete");
     }
-    if (!list.item(0).contains("checked")) {
+    if (!list.item(0).classList.contains("checked")) {
       setAriaLabel(list.item(0), "Mark this step as complete");
     }
   }
@@ -133,10 +133,10 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
     event.preventDefault();
     if (isLastMenuItem) {
       list.item(0).focus();
-      if (list.item(0).contains("checked")) {
+      if (list.item(0).classList.contains("checked")) {
         setAriaLabel(list.item(0), "Mark this step as incomplete");
       }
-      if (!list.item(0).contains("checked")) {
+      if (!list.item(0).classList.contains("checked")) {
         setAriaLabel(list.item(0), "Mark this step as complete");
       }
       return;
@@ -148,23 +148,23 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
     event.preventDefault();
     if (isFirstMenuItem) {
       list.item(list.length - 1).focus();
-      if (list.item(list.length - 1).contains("checked")) {
+      if (list.item(list.length - 1).classList.contains("checked")) {
         setAriaLabel(
           list.item(list.length - 1),
           "Mark this step as incomplete"
         );
       }
-      if (!list.item(list.length - 1).contains("checked")) {
+      if (!list.item(list.length - 1).classList.contains("checked")) {
         setAriaLabel(list.item(list.length - 1), "Mark this step as complete");
       }
       // isLastMenuItem.focus();
       return;
     }
     previousMenuItem.focus();
-    if (previousMenuItem.contains("checked")) {
+    if (previousMenuItem.classList.contains("checked")) {
       setAriaLabel(previousMenuItem, "Mark this step as incomplete");
     }
-    if (!previousMenuItem.contains("checked")) {
+    if (!previousMenuItem.classList.contains("checked")) {
       setAriaLabel(previousMenuItem, "Mark this step as complete");
     }
   }
