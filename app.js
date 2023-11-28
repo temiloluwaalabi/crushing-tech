@@ -435,6 +435,9 @@ function hideAllTabs(content) {
     const hiddenContent = tab.querySelector(".setup_hidden");
     const tabLoader = tab.querySelector(".loader");
     const tabHeader = tab.querySelector(".setup_header");
+    if (tabHeader.getAttribute("aria-expanded") === true) {
+      setAttribute(tabHeader, "aria-expanded", "false");
+    }
     if (hiddenContent !== content) {
       removeClass(hiddenContent, "show");
       // setAriaLabel(tabLoader, "");
@@ -600,6 +603,8 @@ function handleNextSteps(elements, currentIndex) {
             if (step.classList.contains("active-customize")) {
               removeClass(step, "active-customize");
             }
+            const notHeader = step.querySelector(".setup_header");
+            setAttribute(notHeader, "aria-expanded", "false");
             const notNextStepContent = step.querySelector(".setup_hidden");
             if (notNextStepContent.classList.contains("show")) {
               removeClass(notNextStepContent, "show");
@@ -612,6 +617,8 @@ function handleNextSteps(elements, currentIndex) {
         checkActive();
         addClass(nextStep, "active-customize");
         statusCheck("You're now on the next onboarding step");
+        const nextStepHeader = nextStep.querySelector(".setup_header");
+        setAttribute(nextStepHeader, "aria-expanded", "true");
         nextStep.querySelector(".loader").focus();
         if (nextStep.classList.contains("checked")) {
           setAriaLabel(
@@ -671,13 +678,12 @@ function handleIncompleteSteps(elements, checkedElement) {
     updateSliderAndSteps(stepsCompletedCount);
     if (stepsCompletedCount > 0) {
       removeClass(elements.hiddenStep, "show");
+      setAttribute(elements.setupHeader, "aria-expanded", "false");
     } else {
       if (stepsCompletedCount === 0) {
         addClass(elements.grandParent, "active-customize");
         addClass(elements.hiddenStep, "show");
-        if (elements.grandParent.classList.contains("active-customize")) {
-          elements.setupHeader.setAttribute("aria-expanded", "true");
-        }
+        // setAttribute(elements.setupHeader, "aria-expanded", "false")
         elements.customize.forEach((content) => {
           const hiddenContent = content.querySelector(".setup_hidden");
           if (elements.hiddenStep !== hiddenContent) {
