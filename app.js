@@ -120,28 +120,59 @@ function handlePopupArrowKeyPress(event, menuItemIndex, list) {
   const previousMenuItem = list.item(menuItemIndex - 1);
   // if the user pressed arrow right or arrow down, focus on next one
   if (event.key === "Home") {
+    event.preventDefault();
     list.item(0).focus();
+    if (list.item(0).contains("checked")) {
+      setAriaLabel(list.item(0), "Mark this step as incomplete");
+    }
+    if (!list.item(0).contains("checked")) {
+      setAriaLabel(list.item(0), "Mark this step as complete");
+    }
   }
   if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+    event.preventDefault();
     if (isLastMenuItem) {
       list.item(0).focus();
+      if (list.item(0).contains("checked")) {
+        setAriaLabel(list.item(0), "Mark this step as incomplete");
+      }
+      if (!list.item(0).contains("checked")) {
+        setAriaLabel(list.item(0), "Mark this step as complete");
+      }
       return;
     }
     nextMenuItem.focus();
   }
   // if the user pressed arrow up or arrow left, focus on the previous one
   if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+    event.preventDefault();
     if (isFirstMenuItem) {
       list.item(list.length - 1).focus();
+      if (list.item(list.length - 1).contains("checked")) {
+        setAriaLabel(
+          list.item(list.length - 1),
+          "Mark this step as incomplete"
+        );
+      }
+      if (!list.item(list.length - 1).contains("checked")) {
+        setAriaLabel(list.item(list.length - 1), "Mark this step as complete");
+      }
       // isLastMenuItem.focus();
       return;
     }
     previousMenuItem.focus();
+    if (previousMenuItem.contains("checked")) {
+      setAriaLabel(previousMenuItem, "Mark this step as incomplete");
+    }
+    if (!previousMenuItem.contains("checked")) {
+      setAriaLabel(previousMenuItem, "Mark this step as complete");
+    }
   }
 }
 // Handle User Toaster Escape Key
 function handleUserToasterEscapeKey(event) {
   if (event.key === "Escape") {
+    event.preventDefault();
     toggleUserToasterBody();
     statusCheck("User Settings Panel has been closed");
     elements.userToaster.focus();
@@ -364,11 +395,13 @@ function hideAllTabs(content) {
   elements.customize.forEach((tab) => {
     const hiddenContent = tab.querySelector(".setup_hidden");
     const tabLoader = tab.querySelector(".loader");
+    const tabHeader = tab.querySelector(".setup_header");
     if (hiddenContent !== content) {
       removeClass(hiddenContent, "show");
       setAriaLabel(tabLoader, "");
       removeClass(tab, "active-customize");
       setAttribute(tab, "aria-expanded", "false");
+      setAriaLabel(tabHeader, "");
     }
   });
 }
@@ -421,11 +454,17 @@ elements.customize.forEach((item) => {
   };
   const handleStepKeyup = (event) => {
     if (event.key === "Enter") {
+      event.preventDefault();
       onBoardingSteps(item, content);
     }
   };
   header.addEventListener("click", handleStepClick);
   item.addEventListener("keyup", handleStepKeyup);
+  // item.addEventListener("keyup", (event) => {
+  //   item.querySelector(".setup_header").focus()
+  //   statusCheck("You can press enter to open this step")
+  //   handleStepKeyup(event)
+  // });
 });
 
 // Function to update slider and steps
@@ -441,6 +480,7 @@ function updateSliderAndSteps(steps) {
     "aria-valuetext",
     `${steps} out of ${total} completed`
   );
+  statusCheck(`${steps} out of ${total} completed`);
 }
 // function to open menu
 function openMenu() {
@@ -465,11 +505,18 @@ function closeMenu(element, element2) {
   removeClass(element2, "show");
   element.setAttribute("aria-expanded", "false");
 }
+
 // this is to control the Key Press for the onboarding steps
 function keyPress() {
   const scrollDivs = elements.setupBodyDiv.querySelectorAll(".customize");
   scrollDivs.item(0).focus();
   scrollDivs.item(0).querySelector(".loader").focus();
+  if (scrollDivs.item(0).contains("checked")) {
+    setAriaLabel(scrollDivs.item(0), "Mark this step as incomplete");
+  }
+  {
+    setAriaLabel(scrollDivs.item(0), "Mark this step as complete");
+  }
   scrollDivs.forEach((menuItem, menuItemIndex) => {
     menuItem.addEventListener("keyup", (event) => {
       event.preventDefault();
@@ -478,6 +525,7 @@ function keyPress() {
   });
 }
 keyPress();
+
 // generic function for the loading states
 function setLoadingState(elements) {
   addClass(elements.loaderEmpty, "hide");
@@ -519,22 +567,27 @@ function handleNextSteps(elements, currentIndex) {
         });
         const nextStepContent = nextStep.querySelector(".setup_hidden");
         addClass(nextStepContent, "show");
-        if (nextStep.classList.contains("active-customize")) {
-          statusCheck("You're now on the next onboarding step");
-        }
         checkActive();
         addClass(nextStep, "active-customize");
+        statusCheck("You're now on the next onboarding step");
         nextStep.querySelector(".loader").focus();
-        setAriaLabel(
-          nextStep.querySelector(".loader"),
-          "Mark this step as complete"
-        );
+        if (nextStep.classList.contains("checked")) {
+          setAriaLabel(
+            nextStep.querySelector(".loader"),
+            "Mark this step as incomplete"
+          );
+        } else {
+          setAriaLabel(
+            nextStep.querySelector(".loader"),
+            "Mark this step as complete"
+          );
+        }
         if (elements.grandParent.classList.contains("active-customize")) {
           removeClass(elements.grandParent, "active-customize");
         }
       }
     }
-  }, 200);
+  }, 1000);
 }
 function handleStepsCompleted(elements) {
   if (!elements.loaderEmpty.classList.contains("hide")) {
@@ -599,9 +652,9 @@ function handleEnterKey(
 ) {
   if (!checkedElement) {
     if (!checkedLoader) {
-      load.addEventListener("focusin", () => {
-        setAriaLabel(load, "Mark this step as complete");
-      });
+      setAriaLabel(load, "Mark this step as complete");
+    } else {
+      setAriaLabel(load, "Mark this step as incomplete");
     }
     setLoadingState(elements);
     setTimeout(() => {
@@ -611,9 +664,7 @@ function handleEnterKey(
 }
 function handleEscapeKey(elements, checkedElement, load) {
   if (checkedElement) {
-    elements.loaderChecked.addEventListener("focusin", () => {
-      setAriaLabel(load, "Mark this step as incomplete");
-    });
+    setAriaLabel(load, "Mark this step as incomplete");
   }
   setIncompleteState(elements, checkedElement);
   setTimeout(() => {
@@ -686,7 +737,6 @@ function loadingKeyState(load, event, index) {
   removeClass(elements.loaderChecked, "rotate-dark-check");
   removeClass(elements.blurCheck, "rotate-blur-check");
 }
-
 elements.loader.forEach((load, index) => {
   load.addEventListener("click", () => {
     loadingState(load, index);
@@ -694,6 +744,7 @@ elements.loader.forEach((load, index) => {
 });
 elements.loader.forEach((load, index) => {
   load.addEventListener("keyup", (event) => {
+    event.preventDefault();
     loadingKeyState(load, event, index);
   });
 });
