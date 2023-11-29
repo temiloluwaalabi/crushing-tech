@@ -723,9 +723,7 @@ function setIncompleteSuccessState(elements, checkedElement) {
     removeClass(elements.grandParent, "active-customize");
     removeClass(elements.grandParent, "checked");
   }
-  setTimeout(() => {
-    handleIncompleteSteps(elements, checkedElement);
-  }, 500);
+  handleIncompleteSteps(elements, checkedElement);
 }
 function handleIncompleteSteps(elements, checkedElement) {
   if (checkedElement) {
@@ -744,9 +742,9 @@ function handleIncompleteSteps(elements, checkedElement) {
           if (elements.hiddenStep !== hiddenContent) {
             removeClass(hiddenContent, "show");
             removeClass(content, "active-customize");
+            statusCheck("You've successfully unchecked all steps");
           }
         });
-        statusCheck("You've successfully unchecked all steps");
       }
     }
     setAriaLabel(
