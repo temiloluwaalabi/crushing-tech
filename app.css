@@ -1351,7 +1351,14 @@ main {
   background-color: var(--grey-300);
   transition: 0.2s ease-in-out;
 }
+.setup-header {
+  cursor: pointer;
+  color: var(--font-dark);
+}
 
+.active-customize .setup-header {
+  font-weight: 600 !important;
+}
 /* .setup-header:focus {
   outline: none;
   border: none;
@@ -1413,6 +1420,11 @@ main {
 @media screen and (max-width: 550px) {
   .input-container {
     width: 248px;
+  }
+  .alert-toaster__body p {
+    color: var(--font-dark) !important;
+    max-width: 294px;
+    text-align: center;
   }
   .alert-body {
     flex-direction: column;
