@@ -524,7 +524,7 @@ function closeMenu(element, element2) {
 // this is to control the Key Press for the onboarding steps
 function keyPress() {
   const scrollDivs = elements.setupBodyDiv.querySelectorAll(".customize");
-  scrollDivs.item(0).focus();
+  // scrollDivs.item(0).focus();
   // scrollDivs.item(0).querySelector(".loader").focus();
   // if (scrollDivs.item(0).classList.contains("checked")) {
   //   setAriaLabel(scrollDivs.item(0), " as incomplete");
