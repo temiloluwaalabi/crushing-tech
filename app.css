@@ -391,6 +391,7 @@ body {
 }
 a {
   text-decoration: none;
+
   color: inherit;
 }
 button {
@@ -1353,7 +1354,7 @@ main {
 }
 .setup-header {
   cursor: pointer;
-  color: var(--font-dark);
+  color: var(--font-dark) !important;
 }
 
 .active-customize .setup-header {
