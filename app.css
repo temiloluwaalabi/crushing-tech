@@ -1355,6 +1355,7 @@ main {
 .setup-header {
   cursor: pointer;
   color: var(--font-dark) !important;
+  font-weight: 500;
 }
 
 .active-customize .setup-header {
