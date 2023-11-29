@@ -326,7 +326,6 @@ function announceVisibility(label) {
 // another function to annouce to screen readers
 function statusCheck(content) {
   elements.hiddenMessage.ariaLabel = `${content}`;
-  console.log(elements.hiddenMessage);
   // Set focus to the hidden message to trigger screen reader announcement
   elements.hiddenMessage.focus();
 }
